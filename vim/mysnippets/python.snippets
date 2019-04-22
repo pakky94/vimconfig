@@ -1,0 +1,11 @@
+global !p
+import datetime
+
+def current_date_time_format():
+	now = datetime.datetime.now()
+	return now.strftime("%Y-%m-%d %H:%M")
+endglobal
+
+snippet todo "todo with current date"
+ # TODO: ${0:what to do}  (`!p snip.rv = current_date_time_format()`)
+endsnippet

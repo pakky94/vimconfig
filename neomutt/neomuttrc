@@ -1,0 +1,18 @@
+# load solarized color scheme
+source ~/dotfiles/neomutt/colors/mutt-colors-solarized-dark-256-fixed.muttrc
+
+set sendmail="/home/pakky/dotfiles/bin/msmtpQ -a gmail"
+#set sendmail_wait = -1
+
+source ~/.mutt/mailboxes
+folder-hook Gmail 'source ~/.mutt/gmail.muttrc'
+folder-hook Netcourrier 'source ~/.mutt/netcourrier.muttrc'
+set mbox_type=Maildir
+set folder=$HOME/Mail
+set spoolfile=+Netcourrier/inbox
+
+set query_command= "~/.virtualenvs/khard/bin/khard email --parsable %s"
+bind editor <Tab> complete-query
+bind editor ^T    complete
+
+set mailcap_path=~/dotfiles/neomutt/mailcap

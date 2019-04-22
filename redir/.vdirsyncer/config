@@ -1,0 +1,18 @@
+[general]
+status_path = "~/.vdirsyncer/status/"
+
+[pair my_contacts]
+a = "my_contacts_local"
+b = "my_contacts_remote"
+collections = ["from a", "from b"]
+
+[storage my_contacts_local]
+type = "filesystem"
+path = "~/.contacts/"
+fileext = ".vcf"
+
+[storage my_contacts_remote]
+type = "carddav"
+url = "https://carddav.net-c.com/adbook/NETCOURRIER_ADDRESS/1"
+username = "@net-c.com"
+password.fetch = ["command", "python2", "-c", "from subprocess import check_output; print(check_output('pass Mail/Netcourrier', shell=True).splitlines()[0])"]

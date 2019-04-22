@@ -1,0 +1,30 @@
+export ZSH=$HOME"/.oh-my-zsh"
+export EDITOR=/usr/bin/nvim
+export PATH=$PATH:$HOME/.local/bin
+
+ZSH_THEME="agnoster"
+
+plugins=(git vi-mode)
+
+source $ZSH/oh-my-zsh.sh
+
+alias khard="~/.virtualenvs/khard/bin/khard"
+alias vdirsyncer="~/.virtualenvs/vdircyncer/bin/vdirsyncer"
+alias vi="nvim"
+alias vim="nvim"
+alias v="nvim"
+
+# tmux aliases
+alias t="tmux new -A -s Main"
+alias mutt="neomutt"
+muttsync() {
+    for arg ; do
+        tmux new-window -n "oIMAP $arg" -d "offlineimap -a $arg"
+    done
+    mutt
+    for arg ; do
+        tmux send-keys -t "oIMAP $arg" C-c
+    done
+}
+alias muttsyncall="muttsync Gmail Netcourrier"
+

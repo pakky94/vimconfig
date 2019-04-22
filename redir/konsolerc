@@ -1,0 +1,19 @@
+[Desktop Entry]
+DefaultProfile=Zsh.profile
+
+[Favorite Profiles]
+Favorites=Shell.profile,Zsh.profile
+
+[KonsoleWindow]
+ShowMenuBarByDefault=false
+
+[MainWindow]
+Height 1080=914
+Height 540=835
+MenuBar=Disabled
+State=AAAA/wAAAAD9AAAAAAAABIcAAAM/AAAABAAAAAQAAAAIAAAACPwAAAAA
+Width 1920=1484
+Width 960=952
+
+[TabBar]
+TabBarVisibility=ShowTabBarWhenNeeded

@@ -1,0 +1,338 @@
+" https://github.com/vim/vim-win32-installer/releases
+" source ~/vimfiles/vimrc
+" Vim env variables {{{
+if has('win32') || has ('win64')
+    let $VIMHOME = $HOME."\\dotfiles\\vim"
+    let $VIMRC = $VIMHOME."\\vimrc"
+    let g:python3_host_prog = "C:\\Python37\\python.exe"
+    let $PATH .= ';'.$HOME.'/vimfiles/bin'
+    "set shell=powershell
+    "source $VIMRUNTIME/mswin.vim
+else
+    let $VIMHOME = $HOME."/dotfiles/vim"
+    let $VIMRC = $VIMHOME."/vimrc"
+endif
+" }}}
+" Vim-plug and plugins {{{
+call plug#begin($VIMHOME.'/bundle')
+"Plug 'joshdick/onedark.vim'
+"Plug 'aonemd/kuroi.vim'
+"Plug 'lifepillar/vim-solarized8'
+Plug 'altercation/vim-colors-solarized'
+Plug 'tpope/vim-surround'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'scrooloose/nerdtree'
+"Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'ludovicchabant/vim-gutentags'
+"Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
+"Plug 'itchyny/lightline.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+Plug 'w0rp/ale'
+" mucomplete
+Plug 'lifepillar/vim-mucomplete'
+Plug 'davidhalter/jedi-vim'
+
+" deoplete
+"if has('nvim')
+  "Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+"else
+  "Plug 'Shougo/deoplete.nvim'
+  "Plug 'roxma/nvim-yarp'
+  "Plug 'roxma/vim-hug-neovim-rpc'
+"endif
+"Plug 'Shougo/neco-vim'
+"Plug 'zchee/deoplete-jedi'
+
+Plug 'tpope/vim-eunuch'
+Plug 'scrooloose/nerdcommenter'
+Plug 'easymotion/vim-easymotion'
+Plug 'dhruvasagar/vim-table-mode'
+Plug 'SirVer/ultisnips'
+Plug 'sjl/gundo.vim'
+Plug 'matze/vim-move'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'scrooloose/syntastic'
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
+"Plug 'junegunn/vim-plug' " enable to have :h for plug
+"Plug 'morhetz/gruvbox'
+"Plug 'ctrlpvim/ctrlp.vim'
+call plug#end()
+" }}}
+" General settings {{{
+set encoding=utf-8
+scriptencoding utf-8
+set langmenu=en_US.UTF-8    " sets the language of the menu (gvim)
+if has('nvim')
+    language en_US.utf8     " sets the language of the messages / ui (vim)
+else
+    language en
+endif
+syntax enable " enable syntax processing
+filetype plugin indent on " load filetype-specific indent files
+set belloff=all " disable bell sounds and screen flashes
+"set lines=60 columns=160 " console default size (for GUI see below)
+set backspace=2 " make backspace work like most other programs
+set lazyredraw " don't redraw while executing macros
+"set regexpengine=1 " use old regex engine
+set magic " for regular expressions torn magic on
+set autoread " set to auto read when a file is changed from outside
+" }}}
+" Coloring {{{
+"set termguicolors
+set background=dark
+set t_Co=256
+"colo onedark
+colo solarized
+" }}}
+" UI Layout {{{
+set number " current line number
+set relativenumber " relative line numbers
+set ruler " enable ruler
+set laststatus=2 " ruler always on
+set showcmd " show command in bottom bar
+set cursorline " highlight current line
+" }}}
+" Searching {{{
+set ignorecase " ignore case when searching
+set smartcase " when searching try to be smart about cases
+set incsearch " search while typing
+set hlsearch " highlight search results
+set wildmenu " visual autocomplete for command menu
+" }}}
+" Folding {{{
+set foldcolumn=1 " add a bit extra margin to the left
+set foldmethod=marker
+set foldlevelstart=10 " open most fold by default
+set foldnestmax=10 " 10 nested fold max
+" }}}
+" Spaces & Tabs {{{
+set tabstop=4 " number of visual spaces per TAB
+set softtabstop=4 " number of spaces in tab when editing
+set expandtab " TABs are spaces
+set shiftwidth=4
+set smartindent
+"set listchars=tab:»·,space:·
+set listchars=tab:»·
+set list
+" }}}
+" Backups {{{
+" Set backup directory and ignore
+"set backup
+"set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+"set backupskip=/tmp/*,/private/tmp/*
+"set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+"set writebackup
+" }}}
+" GVIM settings {{{
+if has("gui_running")
+    set guioptions-=g " don't show inactive menu items
+    set guioptions-=m " hide menu bar
+    set guioptions-=r " hide right-hand scrollbar
+    set guioptions-=L " hide left-hand scrollbar in split window
+    set guioptions-=t " hide tearoff menu items
+    set guioptions-=T " hide toolbar
+    set guioptions+=c " use console dialogs for simple choices
+    set lines=60 columns=180 " set default window size
+    "let g:gtk_nocache=[0x00000000, 0xfc00ffff, 0xf8000001, 0x78000001]
+    set guifont=Fira\ Code:h10
+    "set renderoptions=type:directx
+endif
+" }}}
+" Neovim settings {{{
+if has("nvim")
+    set guifont=Fira\ Code:h10
+    "set wildoptions=pum
+endif
+" }}}
+" Global keymaps {{{
+let g:EasyMotion_do_mapping = 0 " Disable default mappings.
+" extra <ESC> binding to <C-[>
+noremap <C-[> <esc>
+" map Y to yank until the EOL and not work like yy
+map Y y$
+" }}}
+" Normal mode keymaps {{{
+" insert new line with <cr> in normal mode
+nnoremap <cr> o<esc>k
+" Map <C-L> (redraw screen) to also turn off search highlighting until the
+" next search
+nnoremap <C-l> :nohl<cr><C-l>
+" highlight last inserted text
+nnoremap gV `[v`]
+" navigate and close buffers
+nnoremap <C-n> :bnext<cr>
+nnoremap <C-p> :bprevious<cr>
+nnoremap <C-x> :bdelete<cr>
+" }}}
+" Movement keymaps {{{
+" move vertically by visual line
+nnoremap j gj
+nnoremap k gk
+" }}}
+" Leader keymaps {{{
+let mapleader = ";"
+"set timeoutlen=800 " timeout for next key before executing commands
+
+" quick close by ;q
+nnoremap <leader>q :q<cr>
+" quick save by ;w
+nnoremap <leader>w :w!<cr>
+" quick open :Buffers with ;b
+nnoremap <leader>b :Buffers<cr>
+" Fuzzy search for files to open
+nnoremap <leader>f :Files<cr>
+" open file explore with <leader><o>
+"nnoremap <leader>o :Lexplore<cr>
+nnoremap <leader>o :NERDTreeToggle<cr>
+" j<space> to start EasyMotion in both direction
+nmap <leader><space> <Plug>(easymotion-bd-w)
+" toggle gundo
+nnoremap <leader>u :GundoToggle<CR>
+" save session
+nnoremap <leader>s :mksession<CR>
+" edit vimrc/zshrc and load vimrc bindings
+nnoremap <leader><leader>re :vsp $VIMRC<CR>
+nnoremap <leader><leader>rs :source $VIMRC<CR>
+" Smart way to move between windows
+nnoremap <leader>wh <C-w>h
+nnoremap <leader>wj <C-w>j
+nnoremap <leader>wk <C-w>k
+nnoremap <leader>wl <C-w>l
+" }}}
+" Copy & Paste shortcuts {{{
+" paste from system clipboard
+nnoremap <leader>v "+p
+" copy to system clipboard
+vnoremap <leader>c "+y
+" }}}
+" Advanced <ENTER> -> <ESC> mapping {{{
+"function! ToggleEnterMapping()
+    "if empty(mapcheck('<CR>', 'i'))
+        "inoremap <CR> <Esc>`^
+        "return "\<Esc>"
+    "else
+        "iunmap <CR>
+        "return "\<CR>"
+    "endif
+"endfunction
+"call ToggleEnterMapping()
+"inoremap <expr> <S-CR> ToggleEnterMapping()
+"inoremap <CR> <ESC>
+"noremap <expr> <C-CR> <CR>
+" Optional (so <CR> cancels prefix, selection, operator).
+"nnoremap <CR> <Esc>
+"vnoremap <CR> <Esc>gV
+"onoremap <CR> <Esc>
+" }}}
+" Remove trailing spaces {{{
+command! -bar -nargs=? ShowSpaces call ShowSpaces(<args>)
+command! -bar -nargs=0 -range=% TrimSpaces <line1>,<line2>call TrimSpaces()
+" delete trailing whitespaces with <S-F5>
+nnoremap <S-F5>   m`:TrimSpaces<CR>``
+vnoremap <S-F5>   :TrimSpaces<CR>
+" }}}
+" Commands alias {{{
+cnoreabbrev vres (vertical resize)
+" }}}
+" Autogroups {{{
+augroup configgroup
+    autocmd!
+    "autocmd BufWritePre *.php,*.py,*.js,*.txt,*.hs,*.java,*.md
+                "\:call <SID>StripTrailingWhitespaces()
+augroup END
+" }}}
+" Netrw settings {{{
+"let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_winsize = -30 " absolute width
+if has('win32' || 'win64')
+    let g:netrw_cygwin = 0
+    let g:netrw_silent = 1
+    let g:netrw_scp_cmd  = "pscp -q"
+endif
+" }}}
+" LightLine config {{{
+set noshowmode
+"let g:lightline = {
+    "\ 'active': {
+    "\   'left': [['mode'], ['readonly', 'filename', 'modified'], ['gutentags']],
+    "\   'right': [['lineinfo'], ['filetype']]
+    "\ },
+    "\ 'inactive': { 'left': [['readonly', 'filename', 'modified']] },
+    "\ 'component': {
+    "\   'gutentags': '%{gutentags#statusline("[Generating...]")}',
+    "\ },
+    "\ 'colorscheme': 'solarized',
+    "\ }
+" }}}
+" Vim-Mucomplete {{{
+set completeopt-=preview
+set completeopt+=menuone,noselect
+let g:mucomplete#no_mappings = 1
+let g:mucomplete#enable_auto_at_startup = 1
+imap <tab> <plug>(MUcompleteFwd)
+imap <S-tab> <plug>(MUcompleteBwd)
+" }}}
+" ALE {{{
+let g:ale_linters = {'python': ['flake8']}
+" }}}
+" UltiSnips {{{
+let g:UltiSnipsExpandTrigger="<C-s>"
+let g:UltiSnipsJumpForwardTrigger="<C-j>"
+let g:UltiSnipsJumpBackwardTrigger="<C-b>"
+if (has("win32") || has("win64"))
+    let g:UltiSnipsSnippetDirectories=[$VIMHOME.'\\mysnippets']
+else
+    let g:UltiSnipsSnippetDirectories=[$VIMHOME.'/mysnippets']
+endif
+" }}}
+" Jedi settings {{{
+let g:jedi#popup_on_dot = 0
+" }}}
+" Custom Functions {{{
+" strips trailing whitespace at the end of files. this
+" is called on buffer write in the autogroup above.
+function! <SID>StripTrailingWhitespaces()
+    " save last search & cursor position
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    %s/\s\+$//e
+    let @/=_s
+    call cursor(l, c)
+endfunction
+
+" functions to manuallly highlight and delete trailing whitespaces
+function! ShowSpaces(...)
+  let @/='\v(\s+$)|( +\ze\t)'
+  let oldhlsearch=&hlsearch
+  if !a:0
+    let &hlsearch=!&hlsearch
+  else
+    let &hlsearch=a:1
+  end
+  return oldhlsearch
+endfunction
+function! TrimSpaces() range
+  let oldhlsearch=ShowSpaces(1)
+  execute a:firstline.",".a:lastline."substitute ///gec"
+  let &hlsearch=oldhlsearch
+endfunction
+""" }}}
+
+"inoremap <silent><expr> <c-space> coc#refresh()
+"let g:deoplete#enable_at_startup = 1
+
+let g:mkdp_auto_close = 0
+imap <C-space> :complete()
+
+let g:airline_theme='solarized'
+let g:airline_solarized_bg='dark'
+
+let g:gutentags_enabled = 1
+let g:gutentags_project_root = ['tags'] 
+"let g:gutentags_cache_dir = '~/.gutentags'
+

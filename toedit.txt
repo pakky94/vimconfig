@@ -1,0 +1,6 @@
+~/.config/neomutt/neomuttrc
+~/.offlineimaprc
+~/.msmtprc
+~/.vdirsyncer/config
+~/.mutt/gmail.muttrc 
+~/.mutt/netcourrier.muttrc

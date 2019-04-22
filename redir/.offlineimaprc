@@ -1,0 +1,52 @@
+[general]
+pythonfile = ~/dotfiles/offlineimap.py
+accounts = Netcourrier, Gmail
+maxsyncaccounts = 1
+
+[Account Netcourrier]
+localrepository = Netcourrier-Local
+remoterepository = Netcourrier-Remote
+autorefresh = 0.5
+quick = 10
+
+[Repository Netcourrier-Remote]
+type = IMAP
+remotehost = mail.net-c.com
+remoteuser = @net-c.com
+remotepasseval = get_pass("Netcourrier")
+ssl = yes
+cert_fingerprint = 374373502604b4365110f41c0c16c798cd64bbfe
+keepalive = 60
+holdconnectionopen = yes
+
+[Repository Netcourrier-Local]
+type = Maildir
+localfolders = ~/Mail/Netcourrier/
+
+[Account Gmail]
+localrepository = Gmail-Local
+remoterepository = Gmail-Remote
+autorefresh = 0.5
+quick = 10
+
+[Repository Gmail-Remote]
+type = Gmail
+remoteuser = @gmail.com
+remotepasseval = get_pass("Gmail")
+ssl = yes
+cert_fingerprint = 4259517cd4e48a289d332ab3f0ab52a366322824
+folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail']
+keepalive = 60
+holdconnectionopen = yes
+
+[Repository Gmail-Local]
+type = Maildir
+localfolders = ~/Mail/Gmail/
+
+[mbnames]
+enabled = yes
+filename = ~/.mutt/mailboxes
+header = "mailboxes "
+peritem = "+%(accountname)s/%(foldername)s"
+sep = " "
+footer = "\n"

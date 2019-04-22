@@ -1,0 +1,2 @@
+set from="@gmail.com"
+set sendmail="/home/pakky/dotfiles/bin/msmtpQ -a gmail"
