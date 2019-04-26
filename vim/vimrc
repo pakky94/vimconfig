@@ -18,12 +18,14 @@ call plug#begin($VIMHOME.'/bundle')
 "Plug 'joshdick/onedark.vim'
 "Plug 'aonemd/kuroi.vim'
 "Plug 'lifepillar/vim-solarized8'
+"Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'altercation/vim-colors-solarized'
 Plug 'tpope/vim-surround'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
-"Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'ambv/black'
+Plug 'plasticboy/vim-markdown'
 Plug 'ludovicchabant/vim-gutentags'
 "Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 "Plug 'itchyny/lightline.vim'
@@ -336,3 +338,5 @@ let g:gutentags_enabled = 1
 let g:gutentags_project_root = ['tags'] 
 "let g:gutentags_cache_dir = '~/.gutentags'
 
+autocmd FileType markdown cnoreabbrev ctrjs !pandoc -t revealjs -s --mathjax="$HOME/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" -o %.html % -V revealjs-url=$HOME/reveal.js
+autocmd FileType markdown cnoreabbrev ctpdf !pandoc % -o %.pdf

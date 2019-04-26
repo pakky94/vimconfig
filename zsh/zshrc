@@ -16,6 +16,8 @@ alias v="nvim"
 
 # tmux aliases
 alias t="tmux new -A -s Main"
+
+# mutt commands
 alias mutt="neomutt"
 muttsync() {
     for arg ; do
@@ -27,4 +29,4 @@ muttsync() {
     done
 }
 alias muttsyncall="muttsync Gmail Netcourrier"
-
+alias tmutt="tmux new -s Mutt ~/dotfiles/scripts/startmuttintmux.sh"
