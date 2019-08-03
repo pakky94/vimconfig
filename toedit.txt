@@ -1,3 +1,7 @@
+$ gpg --full-key-gen
+$ pass init <gpg-id>
+$ pass insert Mail/account
+
 ~/.config/neomutt/neomuttrc
 ~/.offlineimaprc
 ~/.msmtprc

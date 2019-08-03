@@ -1,0 +1,20 @@
+
+muttsync() {
+    for arg ; do
+        tmux new-window -n "oIMAP $arg" -d "offlineimap -a $arg"
+    done
+    mutt
+    for arg ; do
+        tmux send-keys -t "oIMAP $arg" C-c
+    done
+}
+mailsyncone() {
+    for arg ; do
+        offlineimap -o -a $arg
+    done
+}
+mailsynctmuxone() {
+    for arg ; do
+        tmux new-window -n "oIMAPsync $arg" -d offlineimap -o -a $arg
+    done
+}

@@ -8,25 +8,7 @@ plugins=(git vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
-alias khard="~/.virtualenvs/khard/bin/khard"
-alias vdirsyncer="~/.virtualenvs/vdircyncer/bin/vdirsyncer"
-alias vi="nvim"
-alias vim="nvim"
-alias v="nvim"
-
-# tmux aliases
-alias t="tmux new -A -s Main"
-
-# mutt commands
 alias mutt="neomutt"
-muttsync() {
-    for arg ; do
-        tmux new-window -n "oIMAP $arg" -d "offlineimap -a $arg"
-    done
-    mutt
-    for arg ; do
-        tmux send-keys -t "oIMAP $arg" C-c
-    done
-}
-alias muttsyncall="muttsync Gmail Netcourrier"
-alias tmutt="tmux new -s Mutt ~/dotfiles/scripts/startmuttintmux.sh"
+
+source ~/dotfiles/zsh/functionsrc
+source ~/dotfiles/zsh/variablesrc

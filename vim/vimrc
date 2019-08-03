@@ -2,12 +2,21 @@
 " source ~/vimfiles/vimrc
 " Vim env variables {{{
 if has('win32') || has ('win64')
+    let $SHELL = '"C:\\Program Files\\PowerShell\\6\\pwsh.exe"'
     let $VIMHOME = $HOME."\\dotfiles\\vim"
     let $VIMRC = $VIMHOME."\\vimrc"
     let g:python3_host_prog = "C:\\Python37\\python.exe"
     let $PATH .= ';'.$HOME.'/vimfiles/bin'
-    "set shell=powershell
+    "set shell=pwsh.exe
+    "set shellcmdflag=-NoProfile\ -NoLogo\ -NonInteractive\ -Command
+    "set shellpipe=|
+    "set shellredir=>
     "source $VIMRUNTIME/mswin.vim
+    if empty(glob($VIMHOME.'/autoload/plug.vim'))
+        silent !curl -fLo $HOME/dotfiles/vim/autoload/plug.vim --create-dirs
+            \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        autocmd VimEnter * PlugInstall --sync | source $VIMRC
+    endif
 else
     let $VIMHOME = $HOME."/dotfiles/vim"
     let $VIMRC = $VIMHOME."/vimrc"
@@ -15,52 +24,52 @@ endif
 " }}}
 " Vim-plug and plugins {{{
 call plug#begin($VIMHOME.'/bundle')
+
+" themes and ui
+"Plug 'altercation/vim-colors-solarized'
 "Plug 'joshdick/onedark.vim'
-"Plug 'aonemd/kuroi.vim'
 "Plug 'lifepillar/vim-solarized8'
+"Plug 'aonemd/kuroi.vim'
 "Plug 'dracula/vim', { 'as': 'dracula' }
-Plug 'altercation/vim-colors-solarized'
-Plug 'tpope/vim-surround'
-Plug 'junegunn/fzf'
-Plug 'junegunn/fzf.vim'
-Plug 'scrooloose/nerdtree'
-Plug 'ambv/black'
-Plug 'plasticboy/vim-markdown'
-Plug 'ludovicchabant/vim-gutentags'
-"Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
-"Plug 'itchyny/lightline.vim'
+Plug 'ayu-theme/ayu-vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
-Plug 'w0rp/ale'
-" mucomplete
-Plug 'lifepillar/vim-mucomplete'
-Plug 'davidhalter/jedi-vim'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
 
-" deoplete
-"if has('nvim')
-  "Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-"else
-  "Plug 'Shougo/deoplete.nvim'
-  "Plug 'roxma/nvim-yarp'
-  "Plug 'roxma/vim-hug-neovim-rpc'
-"endif
-"Plug 'Shougo/neco-vim'
-"Plug 'zchee/deoplete-jedi'
+Plug 'tpope/vim-surround'
+Plug 'justinmk/vim-sneak'
+Plug 'scrooloose/nerdtree'
+Plug 'ambv/black'
+Plug 'plasticboy/vim-markdown'
+"Plug 'ludovicchabant/vim-gutentags'
+"Plug 'itchyny/lightline.vim'
+Plug 'tpope/vim-fugitive'
 
 Plug 'tpope/vim-eunuch'
 Plug 'scrooloose/nerdcommenter'
 Plug 'easymotion/vim-easymotion'
 Plug 'dhruvasagar/vim-table-mode'
 Plug 'SirVer/ultisnips'
-Plug 'sjl/gundo.vim'
 Plug 'matze/vim-move'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'scrooloose/syntastic'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
+Plug 'mbbill/undotree'
 "Plug 'junegunn/vim-plug' " enable to have :h for plug
-"Plug 'morhetz/gruvbox'
+Plug 'morhetz/gruvbox'
 "Plug 'ctrlpvim/ctrlp.vim'
+Plug 'mhinz/vim-startify'
+Plug 'nathanaelkane/vim-indent-guides'
+Plug 'vim-scripts/vim-auto-save'
+Plug 'luochen1990/rainbow'
+
+if has('nvim')
+    Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
+    Plug 'Shougo/denite.nvim'
+    Plug 'kizza/actionmenu.nvim'
+endif
 call plug#end()
 " }}}
 " General settings {{{
@@ -73,6 +82,8 @@ else
     language en
 endif
 syntax enable " enable syntax processing
+set nocompatible
+filetype plugin on
 filetype plugin indent on " load filetype-specific indent files
 set belloff=all " disable bell sounds and screen flashes
 "set lines=60 columns=160 " console default size (for GUI see below)
@@ -81,13 +92,23 @@ set lazyredraw " don't redraw while executing macros
 "set regexpengine=1 " use old regex engine
 set magic " for regular expressions torn magic on
 set autoread " set to auto read when a file is changed from outside
+
+set scrolloff=2 " keep 2 lines of context around the cursor
+
+set nobackup
+set nowritebackup
+
+set shortmess+=c "don't give \|ins-completion-menu\| messages
+set cmdheight=2
+
+set signcolumn=yes
 " }}}
 " Coloring {{{
-"set termguicolors
+set termguicolors
 set background=dark
 set t_Co=256
-"colo onedark
-colo solarized
+let ayucolor="dark"
+colorscheme ayu
 " }}}
 " UI Layout {{{
 set number " current line number
@@ -120,6 +141,9 @@ set smartindent
 set listchars=tab:»·
 set list
 " }}}
+" Diff settings {{{
+set diffopt=vertical,filler
+" }}}
 " Backups {{{
 " Set backup directory and ignore
 "set backup
@@ -138,9 +162,9 @@ if has("gui_running")
     set guioptions-=T " hide toolbar
     set guioptions+=c " use console dialogs for simple choices
     set lines=60 columns=180 " set default window size
-    "let g:gtk_nocache=[0x00000000, 0xfc00ffff, 0xf8000001, 0x78000001]
-    set guifont=Fira\ Code:h10
-    "set renderoptions=type:directx
+    let g:gtk_nocache=[0x00000000, 0xfc00ffff, 0xf8000001, 0x78000001]
+    set guifont=Fira\ Code:h14
+    set renderoptions=type:directx
 endif
 " }}}
 " Neovim settings {{{
@@ -165,36 +189,53 @@ nnoremap <C-l> :nohl<cr><C-l>
 " highlight last inserted text
 nnoremap gV `[v`]
 " navigate and close buffers
-nnoremap <C-n> :bnext<cr>
-nnoremap <C-p> :bprevious<cr>
-nnoremap <C-x> :bdelete<cr>
+"nnoremap <C-n> :bnext<cr>
+"nnoremap <C-p> :bprevious<cr>
+"nnoremap <C-x> :bdelete<cr>
+" resize window with arrow keys
+nnoremap <Left> :vertical resize +2<CR>
+nnoremap <Right> :vertical resize -2<CR>
+nnoremap <Up> :resize -2<CR>
+nnoremap <Down> :resize +2<CR>
+nnoremap U <c-r>
+
+nnoremap <silent> <space>te :tabnew<CR>
+nnoremap <silent> <space>tt :tabnext<CR>
+nnoremap <silent> <space>tn :tabnext<CR>
+nnoremap <silent> <space>tp :-tabnext<CR>
+nnoremap <silent> <space>tq :tabclose<CR>
+nnoremap <silent> <space>tl :tabmove +<CR>
+nnoremap <silent> <space>th :tabmove -<CR>
 " }}}
 " Movement keymaps {{{
 " move vertically by visual line
 nnoremap j gj
 nnoremap k gk
+" use B and E to move to the beggining/end of the line
+"nnoremap B ^
+"nnoremap E $
 " }}}
 " Leader keymaps {{{
-let mapleader = ";"
+let mapleader = " "
 "set timeoutlen=800 " timeout for next key before executing commands
 
 " quick close by ;q
 nnoremap <leader>q :q<cr>
 " quick save by ;w
 nnoremap <leader>w :w!<cr>
+" save and quit
+nnoremap <leader>wq :wq<cr>
 " quick open :Buffers with ;b
 nnoremap <leader>b :Buffers<cr>
 " Fuzzy search for files to open
-nnoremap <leader>f :Files<cr>
+nnoremap <leader>f :GFiles<cr>
 " open file explore with <leader><o>
 "nnoremap <leader>o :Lexplore<cr>
 nnoremap <leader>o :NERDTreeToggle<cr>
-" j<space> to start EasyMotion in both direction
-nmap <leader><space> <Plug>(easymotion-bd-w)
 " toggle gundo
-nnoremap <leader>u :GundoToggle<CR>
+nnoremap <leader>u :UndotreeToggle<CR>
 " save session
-nnoremap <leader>s :mksession<CR>
+"nnoremap <leader>s :mksession<CR>
 " edit vimrc/zshrc and load vimrc bindings
 nnoremap <leader><leader>re :vsp $VIMRC<CR>
 nnoremap <leader><leader>rs :source $VIMRC<CR>
@@ -203,6 +244,9 @@ nnoremap <leader>wh <C-w>h
 nnoremap <leader>wj <C-w>j
 nnoremap <leader>wk <C-w>k
 nnoremap <leader>wl <C-w>l
+nnoremap <leader>ww <C-w>w
+" ;<space> to start EasyMotion in both direction
+nmap <leader>e <Plug>(easymotion-bd-w)
 " }}}
 " Copy & Paste shortcuts {{{
 " paste from system clipboard
@@ -237,7 +281,7 @@ nnoremap <S-F5>   m`:TrimSpaces<CR>``
 vnoremap <S-F5>   :TrimSpaces<CR>
 " }}}
 " Commands alias {{{
-cnoreabbrev vres (vertical resize)
+cnoreabbrev vres vertical resize
 " }}}
 " Autogroups {{{
 augroup configgroup
@@ -245,6 +289,18 @@ augroup configgroup
     "autocmd BufWritePre *.php,*.py,*.js,*.txt,*.hs,*.java,*.md
                 "\:call <SID>StripTrailingWhitespaces()
 augroup END
+
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup END
+
+autocmd Filetype python setlocal      expandtab tabstop=4 shiftwidth=4 softtabstop=4
+autocmd Filetype javascript setlocal  expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd Filetype json setlocal        expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd Filetype css setlocal        expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd Filetype scss setlocal        expandtab tabstop=2 shiftwidth=2 softtabstop=2
 " }}}
 " Netrw settings {{{
 "let g:netrw_banner = 0
@@ -271,15 +327,124 @@ set noshowmode
     "\ }
 " }}}
 " Vim-Mucomplete {{{
-set completeopt-=preview
-set completeopt+=menuone,noselect
-let g:mucomplete#no_mappings = 1
-let g:mucomplete#enable_auto_at_startup = 1
-imap <tab> <plug>(MUcompleteFwd)
-imap <S-tab> <plug>(MUcompleteBwd)
+"set completeopt-=preview
+"set completeopt+=menuone,noselect
+"let g:mucomplete#no_mappings = 1
+"let g:mucomplete#enable_auto_at_startup = 1
+"imap <tab> <plug>(MUcompleteFwd)
+"imap <S-tab> <plug>(MUcompleteBwd)
 " }}}
 " ALE {{{
-let g:ale_linters = {'python': ['flake8']}
+"let g:ale_linters = {'python': ['pylint']}
+" }}}
+" CoC {{{
+" use <tab> for trigger completion and navigate to the next complete item
+try
+    let g:coc_global_extensions = [
+        \ 'coc-vimlsp',
+        \ 'coc-json',
+        \ 'coc-tsserver',
+        \ 'coc-eslint',
+        \ 'coc-prettier',
+        \ 'coc-css',
+        \ 'coc-python',
+        \]
+    let g:coc_user_config = {
+        \ "javascript.suggestionActions.enabled": v:false,
+        \ "python.jediEnabled": v:false,
+        \ "suggest.echodocSupport": v:true,
+        \ "suggest.triggerAfterInsertEnter": v:true,
+        \ "suggest.minTriggerInputLength": 2,
+        \ "suggest.snippetIndicator": "►",
+        \ "eslint": {
+        \   "enable": v:true,
+        \   "filetypes": ["javascript", "javascriptreact"]
+        \ },
+        \ "vimlsp.debug": {
+        \   "type": "boolean",
+        \   "default": v:false,
+        \   "description": "enable coc-vimlsp service debug"
+        \ },
+        \ "vimlsp.diagnostic.enable": {
+        \   "type": "boolean",
+        \   "default": v:true,
+        \   "description": "enable diagnostic"
+        \ },
+        \ "vimlsp.trace.server": {
+        \   "type": "string",
+        \   "default": "off",
+        \   "enum": [
+        \     "off",
+        \     "messages",
+        \     "verbose"
+        \   ],
+        \   "description": "Trace level of vim language server"
+        \ }
+    \ }
+        "\ "coc.preferences.formatOnSaveFiletypes": ["javascript", "json", "javascriptreact"],
+    
+    function! s:check_back_space() abort
+        let col = col('.') - 1
+        return !col || getline('.')[col - 1]  =~ '\s'
+    endfunction
+
+    inoremap <silent><expr> <TAB>
+         \ pumvisible() ? "\<C-n>" :
+         \ <SID>check_back_space() ? "\<TAB>" :
+         \ coc#refresh()
+    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+    " use <c-space>for trigger completion
+    inoremap <silent><expr> <c-space> coc#refresh()
+
+    " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+    " Coc only does snippet and additional edit on confirm.
+    inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+    " Use `[c` and `]c` to navigate diagnostics
+    nmap <silent> [c <Plug>(coc-diagnostic-prev)
+    nmap <silent> ]c <Plug>(coc-diagnostic-next)
+
+    " Remap keys for gotos
+    nmap <silent> gd <Plug>(coc-definition)
+    nmap <silent> gy <Plug>(coc-type-definition)
+    nmap <silent> gi <Plug>(coc-implementation)
+    nmap <silent> gr <Plug>(coc-references)
+
+    " Use K to show documentation in preview window
+    nnoremap <silent> K :call <SID>show_documentation()<CR>
+    function! s:show_documentation()
+        if (index(['vim','help'], &filetype) >= 0)
+            execute 'h '.expand('<cword>')
+        else
+            call CocAction('doHover')
+        endif
+    endfunction
+
+    " Highlight symbol under cursor on CursorHold
+    autocmd CursorHold * silent call CocActionAsync('highlight')
+
+    " Using CocList
+    " Show all diagnostics
+    nnoremap <silent> <space>d  :<C-u>CocList diagnostics<cr>
+    " Manage extensions
+    "nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+    " Show commands
+    "nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+    " Find symbol of current document
+    "nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+    " Search workspace symbols
+    "nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+    " Do default action for next item.
+    nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+    " Do default action for previous item.
+    nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+    " Resume latest coc list
+    nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+
+    nnoremap <silent> <leader>s :<C-u>CocAction<CR>
+catch
+    echo "coc.nvim is not installed"
+endtry
 " }}}
 " UltiSnips {{{
 let g:UltiSnipsExpandTrigger="<C-s>"
@@ -293,6 +458,44 @@ endif
 " }}}
 " Jedi settings {{{
 let g:jedi#popup_on_dot = 0
+" }}}
+" Startify {{{
+let g:startify_lists = [
+    \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+    \ { 'type': 'files',     'header': ['   MRU']            },
+    \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
+    \ { 'type': 'sessions',  'header': ['   Sessions']       },
+    \ { 'type': 'commands',  'header': ['   Commands']       },
+    \ ]   
+let g:startify_bookmarks = [ 
+    \ { 'c': '~/Dotfiles/vim/vimrc' },
+    \ { 'b': '~/Documents/tutorials/react-node/bwm-react/' },
+    \ ]
+if has('nvim')
+    let g:startify_ascii = [
+                \ "'              .,-:;//;:=,                                                             ,:/+/-",
+                \ "'         . :H@@@MM@M#H/.,+%;,                                                         /M/              .,-=;//;-",
+                \ "'      ,/X+ +M@@M@MM%=,-%HMMM@X/,                                                 .:/= ;MH/,    ,=/+%$XH@MM#@:",
+                \ "'     -+@MM; $M@@MH+-,;XMMMM@MMMM@+-                                             -$##@+$###@H@MMM#######H:.    -/H#",
+                \ "'    ;@M@@M- XM@X;. -+XXXXXHHH@M@M#@/.                                      .,H@H@ X######@ -H#####@+-     -+H###@X",
+                \ "'  ,%MM@@MH ,@%=            .---=-=:=,.                                      .,@##H;      +XM##M/,     =%@###@X;-",
+                \ "'  -@#@@@MX .,              -%HX$$%%%+;                                    X%-  :M##########$.    .:%M###@%:",
+                \ "' =-./@M@M$                  .;@MMMM@MM:                                   M##H,   +H@@@$/-.  ,;$M###@%,          -",
+                \ "' X@/ -$MM/                    .+MM@@@M$                                   M####M=,,---,.-%%H####M$:          ,+@##",
+                \ "',@M@H: :@:                    . -X#@@@@-                                  @##################@/.         :%H##@$-",
+                \ "',@@@MMX, .                    /H- ;@M@M=                                  M###############H,         ;HM##M$=",
+                \ "'.H@@@@M@+,                    %MM+..%#$.                                  #################.    .=$M##M$=",
+                \ "' /MMMM@MMH/.                  XM@MH; -;                                   ################H..;XM##M$=          .:+",
+                \ "'  /%+%$XHH@$=              , .H@@@@MX,                                    M###################@%=           =+@MH%",
+                \ "'   .=--------.           -%H.,@@@@@MX,                                    @#################M/.         =+H#X%=",
+                \ "'   .%MM@@@HHHXX$$$%+- .:$MMX -M@@MM%.                                     =+M###############M,      ,/X#H+:,",
+                \ "'     =XMMM@MM@MM#H;,-+HMM@M+ /MMMX=                                         .;XM###########H=   ,/X#H+:;",
+                \ "'       =%@M@M#@$-.=$@MM@@@M; %M%=                                              .=+HM#######M+/+HM@+=.",
+                \ "'         ,:+$+-,/H#MMMMMMM@- -,                                                    ,:/%XM####H/.",
+                \ "'               =++%%%%+/:-.                                                             ,.:=-.",
+                \]                                                                          
+endif
+let g:startify_custom_header = map(g:startify_ascii, '"     ".v:val')
 " }}}
 " Custom Functions {{{
 " strips trailing whitespace at the end of files. this
@@ -324,19 +527,208 @@ function! TrimSpaces() range
   let &hlsearch=oldhlsearch
 endfunction
 """ }}}
+" Denite {{{
+try
+    " Custom options for Denite
+    "   auto_resize             - Auto resize the Denite window height automatically.
+    "   prompt                  - Customize denite prompt
+    "   direction               - Specify Denite window direction as directly below current pane
+    "   winminheight            - Specify min height for Denite window
+    "   highlight_mode_insert   - Specify h1-CursorLine in insert mode
+    "   prompt_highlight        - Specify color of prompt
+    "   highlight_matched_char  - Matched characters highlight
+    "   highlight_matched_range - matched range highlight
+    let s:denite_options = {'default' : {
+    \ 'auto_resize': 1,
+    \ 'prompt': 'λ:',
+    \ 'direction': 'rightbelow',
+    \ 'winminheight': '10',
+    \ 'highlight_mode_insert': 'Visual',
+    \ 'highlight_mode_normal': 'Visual',
+    \ 'prompt_highlight': 'Function',
+    \ 'highlight_matched_char': 'Function',
+    \ 'highlight_matched_range': 'Normal'
+    \ }}
 
-"inoremap <silent><expr> <c-space> coc#refresh()
-"let g:deoplete#enable_at_startup = 1
+    " Loop through denite options and enable them
+    function! s:profile(opts) abort
+      for l:fname in keys(a:opts)
+        for l:dopt in keys(a:opts[l:fname])
+          call denite#custom#option(l:fname, l:dopt, a:opts[l:fname][l:dopt])
+        endfor
+      endfor
+    endfunction
+    call s:profile(s:denite_options)
+
+    call denite#custom#var('file/rec', 'command',  ['rg', '--files']) 
+    call denite#custom#var('grep', 'command', ['rg'])
+    call denite#custom#var('grep', 'default_opts',
+          \ ['--hidden', '--vimgrep', '--smart-case'])
+    call denite#custom#var('grep', 'recursive_opts', [])
+    call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
+    call denite#custom#var('grep', 'separator', ['--'])
+    call denite#custom#var('grep', 'final_opts', [])
+
+    autocmd FileType denite call s:denite_my_settings()
+    function! s:denite_my_settings() abort
+      nnoremap <silent><buffer><expr> <CR>
+      \ denite#do_map('do_action')
+      nnoremap <silent><buffer><expr> v
+      \ denite#do_map('do_action', 'vsplit')
+      nnoremap <silent><buffer><expr> h
+      \ denite#do_map('do_action', 'split')
+      nnoremap <silent><buffer><expr> d
+      \ denite#do_map('do_action', 'delete')
+      nnoremap <silent><buffer><expr> p
+      \ denite#do_map('do_action', 'preview')
+      nnoremap <silent><buffer><expr> q
+      \ denite#do_map('quit')
+      nnoremap <silent><buffer><expr> i
+      \ denite#do_map('open_filter_buffer')
+    endfunction
+
+    nnoremap <leader>f :<C-u>Denite file/rec -split=floating -winrow=1 -start-filter<CR>
+    "nnoremap <leader>b :<C-u>Denite buffer -split=floating -winrow=1 -start-filter<CR>
+    nnoremap <leader>b :<C-u>Denite buffer -split=floating -winrow=1<CR>
+    nnoremap <leader>8 :<C-u>DeniteCursorWord grep:.<CR>
+    nnoremap <leader>/ :<C-u>Denite grep:.<CR>
+    nnoremap <leader><Space>/ :<C-u>DeniteBufferDir grep:.<CR>
+    "nnoremap <leader>r :<C-u>Denite -resume -cursor-pos=+1<CR>
+    nnoremap <leader><C-r> :<C-u>Denite register:.<CR>
+    " references source from LanguageClient
+    nnoremap <leader>lr :<C-u>Denite references<CR>
+
+    hi link deniteMatchedChar Special
+catch
+    echo "Denite is not installed"
+endtry
+" }}}
+" MonkeyTerminal {{{
+" With this function you can reuse the same terminal in neovim.
+" You can toggle the terminal and also send a command to the same terminal.
+
+let s:monkey_terminal_window = -1
+let s:monkey_terminal_buffer = -1
+let s:monkey_terminal_job_id = -1
+
+function! MonkeyTerminalOpen()
+  " Check if buffer exists, if not create a window and a buffer
+  if !bufexists(s:monkey_terminal_buffer)
+    " Creates a window call monkey_terminal
+    new monkey_terminal
+    " Moves to the window the right the current one
+    wincmd L
+    set noswapfile
+    let s:monkey_terminal_job_id = termopen($SHELL, { 'detach': 1 })
+    set noswapfile!
+
+     " Change the name of the buffer to "Terminal 1"
+     silent file Terminal\ 1
+     " Gets the id of the terminal window
+     let s:monkey_terminal_window = win_getid()
+     let s:monkey_terminal_buffer = bufnr('%')
+
+    " The buffer of the terminal won't appear in the list of the buffers
+    " when calling :buffers command
+    set nobuflisted
+  else
+    if !win_gotoid(s:monkey_terminal_window)
+    sp
+    " Moves to the window below the current one
+    wincmd L   
+    buffer Terminal\ 1
+     " Gets the id of the terminal window
+     let s:monkey_terminal_window = win_getid()
+    endif
+  endif
+endfunction
+
+function! MonkeyTerminalToggle()
+  if win_gotoid(s:monkey_terminal_window)
+    call MonkeyTerminalClose()
+  else
+    call MonkeyTerminalOpen()
+  endif
+endfunction
+
+function! MonkeyTerminalClose()
+  if win_gotoid(s:monkey_terminal_window)
+    " close the current window
+    hide
+  endif
+endfunction
+
+function! MonkeyTerminalExec(cmd)
+  if !win_gotoid(s:monkey_terminal_window)
+    call MonkeyTerminalOpen()
+  endif
+
+  " clear current input
+  call jobsend(s:monkey_terminal_job_id, "clear\n")
+
+  " run cmd
+  call jobsend(s:monkey_terminal_job_id, a:cmd . "\n")
+  normal! G
+  wincmd p
+endfunction
+
+" With this maps you can now toggle the terminal
+nnoremap <F7> :call MonkeyTerminalToggle()<cr>
+tnoremap <F7> <C-\><C-n>:call MonkeyTerminalToggle()<cr>
+" }}}
+" ActionMenu {{{
+" CoC context menu
+"let s:code_actions = []
+
+"func! ActionMenuCodeActions() abort
+  "let s:code_actions = CocAction('codeActions')
+  "let l:menu_items = map(copy(s:code_actions), { index, item -> item['title'] })
+  "call actionmenu#open(l:menu_items, 'ActionMenuCodeActionsCallback')
+"endfunc
+
+"func! ActionMenuCodeActionsCallback(index, item) abort
+  "if a:index >= 0
+    "let l:selected_code_action = s:code_actions[a:index]
+    "let l:response = CocAction('doCodeAction', l:selected_code_action)
+  "endif
+"endfunc
+
+"nnoremap <silent> <leader>s :call ActionMenuCodeActions()<CR>
+" }}}
+
+"let g:auto_save = 1 " enable AutoSave on Vim startup
+let g:auto_save_in_insert_mode = 0 " do not save while in insert mode
+let g:auto_save_no_updatetime = 1 " do not change the 'updatetime' opiton
+
+let g:indent_guides_enable_on_vim_startup = 1
 
 let g:mkdp_auto_close = 0
-imap <C-space> :complete()
 
-let g:airline_theme='solarized'
-let g:airline_solarized_bg='dark'
+let g:airline_theme='ayu_dark'
+"let g:airline_solarized_bg='dark'
 
-let g:gutentags_enabled = 1
-let g:gutentags_project_root = ['tags'] 
+"let g:gutentags_enabled = 1
+"let g:gutentags_project_root = ['tags'] 
 "let g:gutentags_cache_dir = '~/.gutentags'
+
+if !exists('g:undotree_SetFocusWhenToggle')
+    let g:undotree_SetFocusWhenToggle = 1
+endif
 
 autocmd FileType markdown cnoreabbrev ctrjs !pandoc -t revealjs -s --mathjax="$HOME/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" -o %.html % -V revealjs-url=$HOME/reveal.js
 autocmd FileType markdown cnoreabbrev ctpdf !pandoc % -o %.pdf
+
+
+let g:rainbow_conf = {
+\	'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
+\	'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
+\	'guis': [''],
+\	'cterms': [''],
+\	'operators': '_,\|+\|-\|*\|\/\|===\|!==_',
+\	'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+\}
+let g:rainbow_active = 1
+let g:table_mode_map_prefix = '<leader><leader>t'
+
+:tnoremap <Esc> <C-\><C-n>
+

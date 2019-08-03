@@ -1,1 +1,5 @@
 source ~/dotfiles/neomutt/neomuttrc
+set from="@net-c.com"
+set sendmail="/home/pakky/dotfiles/bin/msmtpQ -a netcourrier"
+set record=+Netcourrier/sent
+set postponed=+Netcourrier/draftbox

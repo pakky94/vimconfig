@@ -1,0 +1,15 @@
+
+alias khard="~/.virtualenvs/khard/bin/khard"
+alias vdirsyncer="~/.virtualenvs/vdirsyncer/bin/vdirsyncer"
+alias vi="nvim"
+alias vim="nvim"
+alias v="nvim"
+
+# tmux aliases
+alias t="tmux new -A -s Main"
+
+# mutt commands
+alias muttsyncall="muttsync Gmail Netcourrier"
+alias tmutt="tmux new -s Mutt ~/dotfiles/scripts/startmuttintmux.sh"
+alias mailsync="mailsyncone Gmail Netcourrier"
+alias mailsynctmux="mailsynctmuxone Gmail Netcourrier"
