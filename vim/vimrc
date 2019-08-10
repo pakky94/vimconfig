@@ -44,7 +44,6 @@ Plug 'scrooloose/nerdtree'
 Plug 'ambv/black'
 Plug 'plasticboy/vim-markdown'
 "Plug 'ludovicchabant/vim-gutentags'
-"Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-fugitive'
 
 Plug 'tpope/vim-eunuch'
@@ -64,16 +63,19 @@ Plug 'mhinz/vim-startify'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'vim-scripts/vim-auto-save'
 Plug 'luochen1990/rainbow'
+Plug 'jiangmiao/auto-pairs'
 
 if has('nvim')
     Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
     Plug 'Shougo/denite.nvim'
-    Plug 'kizza/actionmenu.nvim'
+    "Plug 'kizza/actionmenu.nvim'
 endif
 call plug#end()
 " }}}
 " General settings {{{
 set encoding=utf-8
+set fileencoding=utf-8
+set ffs=unix,dos
 scriptencoding utf-8
 set langmenu=en_US.UTF-8    " sets the language of the menu (gvim)
 if has('nvim')
@@ -102,6 +104,7 @@ set shortmess+=c "don't give \|ins-completion-menu\| messages
 set cmdheight=2
 
 set signcolumn=yes
+"set splitright
 " }}}
 " Coloring {{{
 set termguicolors
@@ -109,6 +112,12 @@ set background=dark
 set t_Co=256
 let ayucolor="dark"
 colorscheme ayu
+
+let g:airline_theme='ayu_dark'
+let g:airline#extensions#coc#enabled = 1
+let g:airline#extensions#branch#enabled = 0
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
+"let g:airline_solarized_bg='dark'
 " }}}
 " UI Layout {{{
 set number " current line number
@@ -117,6 +126,15 @@ set ruler " enable ruler
 set laststatus=2 " ruler always on
 set showcmd " show command in bottom bar
 set cursorline " highlight current line
+
+" show relative line number for current window
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained * set relativenumber
+  autocmd BufLeave,FocusLost   * set norelativenumber
+  "autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  "autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup END
 " }}}
 " Searching {{{
 set ignorecase " ignore case when searching
@@ -125,21 +143,37 @@ set incsearch " search while typing
 set hlsearch " highlight search results
 set wildmenu " visual autocomplete for command menu
 " }}}
+" Spaces & Tabs {{{
+set tabstop=4 " number of visual spaces per TAB
+set softtabstop=4 " number of spaces in tab when editing
+set shiftwidth=4
+set expandtab " TABs are spaces
+set smartindent
+"set listchars=tab:»·,space:·
+set listchars=tab:»·,trail:·
+set list
+
+" language specific tab size
+autocmd Filetype python               setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
+autocmd Filetype javascript           setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd Filetype javascript.jsx       setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd Filetype json                 setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd Filetype css                  setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd Filetype scss                 setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+" }}}
 " Folding {{{
 set foldcolumn=1 " add a bit extra margin to the left
 set foldmethod=marker
 set foldlevelstart=10 " open most fold by default
 set foldnestmax=10 " 10 nested fold max
-" }}}
-" Spaces & Tabs {{{
-set tabstop=4 " number of visual spaces per TAB
-set softtabstop=4 " number of spaces in tab when editing
-set expandtab " TABs are spaces
-set shiftwidth=4
-set smartindent
-"set listchars=tab:»·,space:·
-set listchars=tab:»·
-set list
+
+" language specific folding rules
+autocmd Filetype python               setlocal foldmethod=indent
+autocmd Filetype javascript           setlocal foldmethod=syntax
+autocmd Filetype javascript.jsx       setlocal foldmethod=syntax
+autocmd Filetype json                 setlocal foldmethod=syntax
+autocmd Filetype css                  setlocal foldmethod=syntax
+autocmd Filetype scss                 setlocal foldmethod=syntax
 " }}}
 " Diff settings {{{
 set diffopt=vertical,filler
@@ -179,6 +213,8 @@ let g:EasyMotion_do_mapping = 0 " Disable default mappings.
 noremap <C-[> <esc>
 " map Y to yank until the EOL and not work like yy
 map Y y$
+" use <Esc> to exit a terminal
+:tnoremap <Esc> <C-\><C-n>
 " }}}
 " Normal mode keymaps {{{
 " insert new line with <cr> in normal mode
@@ -277,8 +313,8 @@ vnoremap <leader>c "+y
 command! -bar -nargs=? ShowSpaces call ShowSpaces(<args>)
 command! -bar -nargs=0 -range=% TrimSpaces <line1>,<line2>call TrimSpaces()
 " delete trailing whitespaces with <S-F5>
-nnoremap <S-F5>   m`:TrimSpaces<CR>``
-vnoremap <S-F5>   :TrimSpaces<CR>
+"nnoremap <S-F5>   :TrimSpaces<CR>
+"vnoremap <S-F5>   :TrimSpaces<CR>
 " }}}
 " Commands alias {{{
 cnoreabbrev vres vertical resize
@@ -289,18 +325,6 @@ augroup configgroup
     "autocmd BufWritePre *.php,*.py,*.js,*.txt,*.hs,*.java,*.md
                 "\:call <SID>StripTrailingWhitespaces()
 augroup END
-
-augroup numbertoggle
-  autocmd!
-  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
-  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
-augroup END
-
-autocmd Filetype python setlocal      expandtab tabstop=4 shiftwidth=4 softtabstop=4
-autocmd Filetype javascript setlocal  expandtab tabstop=2 shiftwidth=2 softtabstop=2
-autocmd Filetype json setlocal        expandtab tabstop=2 shiftwidth=2 softtabstop=2
-autocmd Filetype css setlocal        expandtab tabstop=2 shiftwidth=2 softtabstop=2
-autocmd Filetype scss setlocal        expandtab tabstop=2 shiftwidth=2 softtabstop=2
 " }}}
 " Netrw settings {{{
 "let g:netrw_banner = 0
@@ -311,31 +335,6 @@ if has('win32' || 'win64')
     let g:netrw_silent = 1
     let g:netrw_scp_cmd  = "pscp -q"
 endif
-" }}}
-" LightLine config {{{
-set noshowmode
-"let g:lightline = {
-    "\ 'active': {
-    "\   'left': [['mode'], ['readonly', 'filename', 'modified'], ['gutentags']],
-    "\   'right': [['lineinfo'], ['filetype']]
-    "\ },
-    "\ 'inactive': { 'left': [['readonly', 'filename', 'modified']] },
-    "\ 'component': {
-    "\   'gutentags': '%{gutentags#statusline("[Generating...]")}',
-    "\ },
-    "\ 'colorscheme': 'solarized',
-    "\ }
-" }}}
-" Vim-Mucomplete {{{
-"set completeopt-=preview
-"set completeopt+=menuone,noselect
-"let g:mucomplete#no_mappings = 1
-"let g:mucomplete#enable_auto_at_startup = 1
-"imap <tab> <plug>(MUcompleteFwd)
-"imap <S-tab> <plug>(MUcompleteBwd)
-" }}}
-" ALE {{{
-"let g:ale_linters = {'python': ['pylint']}
 " }}}
 " CoC {{{
 " use <tab> for trigger completion and navigate to the next complete item
@@ -382,7 +381,7 @@ try
         \ }
     \ }
         "\ "coc.preferences.formatOnSaveFiletypes": ["javascript", "json", "javascriptreact"],
-    
+
     function! s:check_back_space() abort
         let col = col('.') - 1
         return !col || getline('.')[col - 1]  =~ '\s'
@@ -466,8 +465,8 @@ let g:startify_lists = [
     \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
     \ { 'type': 'sessions',  'header': ['   Sessions']       },
     \ { 'type': 'commands',  'header': ['   Commands']       },
-    \ ]   
-let g:startify_bookmarks = [ 
+    \ ]
+let g:startify_bookmarks = [
     \ { 'c': '~/Dotfiles/vim/vimrc' },
     \ { 'b': '~/Documents/tutorials/react-node/bwm-react/' },
     \ ]
@@ -493,7 +492,7 @@ if has('nvim')
                 \ "'       =%@M@M#@$-.=$@MM@@@M; %M%=                                              .=+HM#######M+/+HM@+=.",
                 \ "'         ,:+$+-,/H#MMMMMMM@- -,                                                    ,:/%XM####H/.",
                 \ "'               =++%%%%+/:-.                                                             ,.:=-.",
-                \]                                                                          
+                \]
 endif
 let g:startify_custom_header = map(g:startify_ascii, '"     ".v:val')
 " }}}
@@ -560,7 +559,7 @@ try
     endfunction
     call s:profile(s:denite_options)
 
-    call denite#custom#var('file/rec', 'command',  ['rg', '--files']) 
+    call denite#custom#var('file/rec', 'command',  ['rg', '--files'])
     call denite#custom#var('grep', 'command', ['rg'])
     call denite#custom#var('grep', 'default_opts',
           \ ['--hidden', '--vimgrep', '--smart-case'])
@@ -587,11 +586,11 @@ try
       \ denite#do_map('open_filter_buffer')
     endfunction
 
-    nnoremap <leader>f :<C-u>Denite file/rec -split=floating -winrow=1 -start-filter<CR>
     "nnoremap <leader>b :<C-u>Denite buffer -split=floating -winrow=1 -start-filter<CR>
-    nnoremap <leader>b :<C-u>Denite buffer -split=floating -winrow=1<CR>
-    nnoremap <leader>8 :<C-u>DeniteCursorWord grep:.<CR>
-    nnoremap <leader>/ :<C-u>Denite grep:.<CR>
+    nnoremap <leader>f :<C-u>Denite file/rec -split=floating -winminheight=20 -start-filter<CR>
+    nnoremap <leader>b :<C-u>Denite buffer -split=floating -winminheight=20<CR>
+    nnoremap <leader>8 :<C-u>DeniteCursorWord grep:. -split=floating -winminheight=20<CR>
+    nnoremap <leader>/ :<C-u>Denite grep:.::! -split=floating -winminheight=20 -start-filter<CR>
     nnoremap <leader><Space>/ :<C-u>DeniteBufferDir grep:.<CR>
     "nnoremap <leader>r :<C-u>Denite -resume -cursor-pos=+1<CR>
     nnoremap <leader><C-r> :<C-u>Denite register:.<CR>
@@ -602,6 +601,30 @@ try
 catch
     echo "Denite is not installed"
 endtry
+" }}}
+" ActionMenu {{{
+" CoC context menu
+"let s:code_actions = []
+
+"func! ActionMenuCodeActions() abort
+  "let s:code_actions = CocAction('codeActions')
+  "let l:menu_items = map(copy(s:code_actions), { index, item -> item['title'] })
+  "call actionmenu#open(l:menu_items, 'ActionMenuCodeActionsCallback')
+"endfunc
+
+"func! ActionMenuCodeActionsCallback(index, item) abort
+  "if a:index >= 0
+    "let l:selected_code_action = s:code_actions[a:index]
+    "let l:response = CocAction('doCodeAction', l:selected_code_action)
+  "endif
+"endfunc
+
+"nnoremap <silent> <leader>s :call ActionMenuCodeActions()<CR>
+" }}}
+" AutoSave {{{
+"let g:auto_save = 1 " enable AutoSave on Vim startup
+let g:auto_save_in_insert_mode = 0 " do not save while in insert mode
+let g:auto_save_no_updatetime = 1 " do not change the 'updatetime' opiton
 " }}}
 " MonkeyTerminal {{{
 " With this function you can reuse the same terminal in neovim.
@@ -635,7 +658,7 @@ function! MonkeyTerminalOpen()
     if !win_gotoid(s:monkey_terminal_window)
     sp
     " Moves to the window below the current one
-    wincmd L   
+    wincmd L
     buffer Terminal\ 1
      " Gets the id of the terminal window
      let s:monkey_terminal_window = win_getid()
@@ -676,39 +699,12 @@ endfunction
 nnoremap <F7> :call MonkeyTerminalToggle()<cr>
 tnoremap <F7> <C-\><C-n>:call MonkeyTerminalToggle()<cr>
 " }}}
-" ActionMenu {{{
-" CoC context menu
-"let s:code_actions = []
-
-"func! ActionMenuCodeActions() abort
-  "let s:code_actions = CocAction('codeActions')
-  "let l:menu_items = map(copy(s:code_actions), { index, item -> item['title'] })
-  "call actionmenu#open(l:menu_items, 'ActionMenuCodeActionsCallback')
-"endfunc
-
-"func! ActionMenuCodeActionsCallback(index, item) abort
-  "if a:index >= 0
-    "let l:selected_code_action = s:code_actions[a:index]
-    "let l:response = CocAction('doCodeAction', l:selected_code_action)
-  "endif
-"endfunc
-
-"nnoremap <silent> <leader>s :call ActionMenuCodeActions()<CR>
-" }}}
-
-"let g:auto_save = 1 " enable AutoSave on Vim startup
-let g:auto_save_in_insert_mode = 0 " do not save while in insert mode
-let g:auto_save_no_updatetime = 1 " do not change the 'updatetime' opiton
-
 let g:indent_guides_enable_on_vim_startup = 1
 
 let g:mkdp_auto_close = 0
 
-let g:airline_theme='ayu_dark'
-"let g:airline_solarized_bg='dark'
-
 "let g:gutentags_enabled = 1
-"let g:gutentags_project_root = ['tags'] 
+"let g:gutentags_project_root = ['tags']
 "let g:gutentags_cache_dir = '~/.gutentags'
 
 if !exists('g:undotree_SetFocusWhenToggle')
@@ -729,6 +725,4 @@ let g:rainbow_conf = {
 \}
 let g:rainbow_active = 1
 let g:table_mode_map_prefix = '<leader><leader>t'
-
-:tnoremap <Esc> <C-\><C-n>
 
