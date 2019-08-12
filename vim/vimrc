@@ -41,7 +41,6 @@ Plug 'mxw/vim-jsx'
 Plug 'tpope/vim-surround'
 Plug 'justinmk/vim-sneak'
 Plug 'scrooloose/nerdtree'
-Plug 'ambv/black'
 Plug 'plasticboy/vim-markdown'
 "Plug 'ludovicchabant/vim-gutentags'
 Plug 'tpope/vim-fugitive'
@@ -152,28 +151,12 @@ set smartindent
 "set listchars=tab:»·,space:·
 set listchars=tab:»·,trail:·
 set list
-
-" language specific tab size
-autocmd Filetype python               setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
-autocmd Filetype javascript           setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
-autocmd Filetype javascript.jsx       setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
-autocmd Filetype json                 setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
-autocmd Filetype css                  setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
-autocmd Filetype scss                 setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 " }}}
 " Folding {{{
 set foldcolumn=1 " add a bit extra margin to the left
 set foldmethod=marker
 set foldlevelstart=10 " open most fold by default
 set foldnestmax=10 " 10 nested fold max
-
-" language specific folding rules
-autocmd Filetype python               setlocal foldmethod=indent
-autocmd Filetype javascript           setlocal foldmethod=syntax
-autocmd Filetype javascript.jsx       setlocal foldmethod=syntax
-autocmd Filetype json                 setlocal foldmethod=syntax
-autocmd Filetype css                  setlocal foldmethod=syntax
-autocmd Filetype scss                 setlocal foldmethod=syntax
 " }}}
 " Diff settings {{{
 set diffopt=vertical,filler
@@ -341,24 +324,13 @@ endif
 try
     let g:coc_global_extensions = [
         \ 'coc-vimlsp',
-        \ 'coc-json',
-        \ 'coc-tsserver',
-        \ 'coc-eslint',
-        \ 'coc-prettier',
-        \ 'coc-css',
-        \ 'coc-python',
         \]
     let g:coc_user_config = {
-        \ "javascript.suggestionActions.enabled": v:false,
         \ "python.jediEnabled": v:false,
         \ "suggest.echodocSupport": v:true,
         \ "suggest.triggerAfterInsertEnter": v:true,
         \ "suggest.minTriggerInputLength": 2,
         \ "suggest.snippetIndicator": "►",
-        \ "eslint": {
-        \   "enable": v:true,
-        \   "filetypes": ["javascript", "javascriptreact"]
-        \ },
         \ "vimlsp.debug": {
         \   "type": "boolean",
         \   "default": v:false,
@@ -444,6 +416,40 @@ try
 catch
     echo "coc.nvim is not installed"
 endtry
+" }}}
+" JavaScript {{{
+autocmd Filetype javascript           setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd Filetype javascript.jsx       setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd Filetype javascript           setlocal foldmethod=syntax
+autocmd Filetype javascript.jsx       setlocal foldmethod=syntax
+
+call coc#add_extension('coc-tsserver', 'coc-eslint', 'coc-prettier')
+
+call coc#config('javascript', {'suggestionActions.enabled': v:false})
+call coc#config('eslint', {
+        \   'enable': v:true,
+        \   'filetypes': ['javascript', 'javascriptreact']
+        \ })
+" }}}
+" CSS {{{
+autocmd Filetype css                  setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd Filetype scss                 setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd Filetype css                  setlocal foldmethod=syntax
+autocmd Filetype scss                 setlocal foldmethod=syntax
+
+call coc#add_extension('coc-css')
+" }}}
+" JSON {{{
+autocmd Filetype json                 setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd Filetype json                 setlocal foldmethod=syntax
+
+call coc#add_extension('coc-json')
+" }}}
+" Python {{{
+autocmd Filetype python               setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
+autocmd Filetype python               setlocal foldmethod=indent
+
+call coc#add_extension('coc-python')
 " }}}
 " UltiSnips {{{
 let g:UltiSnipsExpandTrigger="<C-s>"
@@ -702,10 +708,6 @@ tnoremap <F7> <C-\><C-n>:call MonkeyTerminalToggle()<cr>
 let g:indent_guides_enable_on_vim_startup = 1
 
 let g:mkdp_auto_close = 0
-
-"let g:gutentags_enabled = 1
-"let g:gutentags_project_root = ['tags']
-"let g:gutentags_cache_dir = '~/.gutentags'
 
 if !exists('g:undotree_SetFocusWhenToggle')
     let g:undotree_SetFocusWhenToggle = 1
