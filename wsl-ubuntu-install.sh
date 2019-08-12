@@ -1,3 +1,4 @@
+cp -a ./redir/. ~/
 sudo add-apt-repository ppa:neovim-ppa/unstable
 sudo apt-get update && sudo apt-get upgrade
 sudo apt-get install neovim python-dev python-pip python3-dev python3-pip
