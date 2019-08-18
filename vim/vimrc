@@ -241,7 +241,7 @@ let mapleader = " "
 " quick close by ;q
 nnoremap <leader>q :q<cr>
 " quick save by ;w
-nnoremap <leader>w :w!<cr>
+nnoremap <leader>w :up!<cr>
 " save and quit
 nnoremap <leader>wq :wq<cr>
 " quick open :Buffers with ;b
@@ -301,6 +301,7 @@ command! -bar -nargs=0 -range=% TrimSpaces <line1>,<line2>call TrimSpaces()
 " }}}
 " Commands alias {{{
 cnoreabbrev vres vertical resize
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
 " }}}
 " Autogroups {{{
 augroup configgroup
@@ -350,9 +351,9 @@ try
         \     "verbose"
         \   ],
         \   "description": "Trace level of vim language server"
-        \ }
+        \ },
     \ }
-        "\ "coc.preferences.formatOnSaveFiletypes": ["javascript", "json", "javascriptreact"],
+        " \ "coc.preferences.formatOnSaveFiletypes": ["javascript", "json", "javascriptreact"],
 
     function! s:check_back_space() abort
         let col = col('.') - 1
@@ -475,6 +476,7 @@ let g:startify_lists = [
 let g:startify_bookmarks = [
     \ { 'c': '~/Dotfiles/vim/vimrc' },
     \ { 'b': '~/Documents/tutorials/react-node/bwm-react/' },
+    \ { 'n': '~/Documents/tutorials/rncourse/' },
     \ ]
 if has('nvim')
     let g:startify_ascii = [
@@ -565,7 +567,7 @@ try
     endfunction
     call s:profile(s:denite_options)
 
-    call denite#custom#var('file/rec', 'command',  ['rg', '--files'])
+    call denite#custom#var('file/rec', 'command',  ['rg', '--files', '--glob', '!node_modules'])
     call denite#custom#var('grep', 'command', ['rg'])
     call denite#custom#var('grep', 'default_opts',
           \ ['--hidden', '--vimgrep', '--smart-case'])
@@ -573,6 +575,9 @@ try
     call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
     call denite#custom#var('grep', 'separator', ['--'])
     call denite#custom#var('grep', 'final_opts', [])
+
+    call denite#custom#alias('source', 'file/rec/git', 'file/rec')
+    call denite#custom#var('file/rec/git', 'command',  ['rg', '--files', '--ignore-file', '.gitignore'])
 
     autocmd FileType denite call s:denite_my_settings()
     function! s:denite_my_settings() abort
@@ -593,7 +598,8 @@ try
     endfunction
 
     "nnoremap <leader>b :<C-u>Denite buffer -split=floating -winrow=1 -start-filter<CR>
-    nnoremap <leader>f :<C-u>Denite file/rec -split=floating -winminheight=20 -start-filter<CR>
+    nnoremap <leader>f :<C-u>DeniteProjectDir file/rec -split=floating -winminheight=20 -start-filter<CR>
+    nnoremap <leader>g :<C-u>DeniteProjectDir file/rec/git -split=floating -winminheight=20 -start-filter<CR>
     nnoremap <leader>b :<C-u>Denite buffer -split=floating -winminheight=20<CR>
     nnoremap <leader>8 :<C-u>DeniteCursorWord grep:. -split=floating -winminheight=20<CR>
     nnoremap <leader>/ :<C-u>Denite grep:.::! -split=floating -winminheight=20 -start-filter<CR>
