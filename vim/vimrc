@@ -325,6 +325,7 @@ endif
 try
     let g:coc_global_extensions = [
         \ 'coc-vimlsp',
+        \ 'coc-lists',
         \]
     let g:coc_user_config = {
         \ "python.jediEnabled": v:false,
@@ -411,7 +412,9 @@ try
     " Do default action for previous item.
     nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
     " Resume latest coc list
-    nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+    nnoremap <silent> <space>P  :<C-u>CocListResume<CR>
+    " list all vim commands
+    nnoremap <silent> <space>p  :<C-u>CocList vimcommands<CR>
 
     nnoremap <silent> <leader>s :<C-u>CocAction<CR>
 catch
