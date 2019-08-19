@@ -326,8 +326,11 @@ try
     let g:coc_global_extensions = [
         \ 'coc-vimlsp',
         \ 'coc-lists',
+        \ 'coc-yank',
         \]
     let g:coc_user_config = {
+        \ 'yank.highlight.duration': 250,
+        \ 'yank.limit': 20,
         \ "python.jediEnabled": v:false,
         \ "suggest.echodocSupport": v:true,
         \ "suggest.triggerAfterInsertEnter": v:true,
@@ -411,10 +414,12 @@ try
     nnoremap <silent> <space>j  :<C-u>CocNext<CR>
     " Do default action for previous item.
     nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+    " Call yank history
+    nnoremap <silent> <space>p  :<C-u>CocList -A --normal yank<CR>
     " Resume latest coc list
-    nnoremap <silent> <space>P  :<C-u>CocListResume<CR>
+    nnoremap <silent> <space><space>p  :<C-u>CocListResume<CR>
     " list all vim commands
-    nnoremap <silent> <space>p  :<C-u>CocList vimcommands<CR>
+    nnoremap <silent> <space>P  :<C-u>CocList vimcommands<CR>
 
     nnoremap <silent> <leader>s :<C-u>CocAction<CR>
 catch
