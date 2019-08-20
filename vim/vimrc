@@ -329,6 +329,7 @@ try
         \ 'coc-yank',
         \]
     let g:coc_user_config = {
+        \ "coc.preferences.formatOnSaveFiletypes": ["javascript", "json", "javascriptreact"],
         \ 'yank.highlight.duration': 250,
         \ 'yank.limit': 20,
         \ "python.jediEnabled": v:false,
@@ -357,7 +358,6 @@ try
         \   "description": "Trace level of vim language server"
         \ },
     \ }
-        " \ "coc.preferences.formatOnSaveFiletypes": ["javascript", "json", "javascriptreact"],
 
     function! s:check_back_space() abort
         let col = col('.') - 1
@@ -402,6 +402,8 @@ try
     " Using CocList
     " Show all diagnostics
     nnoremap <silent> <space>d  :<C-u>CocList diagnostics<cr>
+    " Do Hover action
+    nnoremap <silent> <space>h  :call CocAction('doHover')<cr>
     " Manage extensions
     "nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
     " Show commands
