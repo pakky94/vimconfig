@@ -63,6 +63,7 @@ Plug 'nathanaelkane/vim-indent-guides'
 Plug 'vim-scripts/vim-auto-save'
 Plug 'luochen1990/rainbow'
 Plug 'jiangmiao/auto-pairs'
+Plug 'mattn/emmet-vim'
 
 if has('nvim')
     Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
@@ -434,6 +435,8 @@ autocmd Filetype javascript.jsx       setlocal expandtab tabstop=2 shiftwidth=2 
 autocmd Filetype javascript           setlocal foldmethod=syntax
 autocmd Filetype javascript.jsx       setlocal foldmethod=syntax
 
+autocmd Filetype javascrit,javascript.jsx EmmetInstall
+
 call coc#add_extension('coc-tsserver', 'coc-eslint', 'coc-prettier')
 
 call coc#config('javascript', {'suggestionActions.enabled': v:false})
@@ -461,6 +464,9 @@ autocmd Filetype python               setlocal expandtab tabstop=4 shiftwidth=4 
 autocmd Filetype python               setlocal foldmethod=indent
 
 call coc#add_extension('coc-python')
+" }}}
+" Emmet-vim {{{
+let g:user_emmet_install_global = 0
 " }}}
 " UltiSnips {{{
 let g:UltiSnipsExpandTrigger="<C-s>"
