@@ -38,6 +38,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 
+Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-surround'
 Plug 'justinmk/vim-sneak'
 Plug 'scrooloose/nerdtree'
@@ -117,6 +118,8 @@ let g:airline_theme='ayu_dark'
 let g:airline#extensions#coc#enabled = 1
 let g:airline#extensions#branch#enabled = 0
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
+let g:airline#extensions#obsession#enabled = 1
+let g:airline#extensions#obsession#indicator_text = '$'
 "let g:airline_solarized_bg='dark'
 " }}}
 " UI Layout {{{
