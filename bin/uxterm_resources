@@ -1,0 +1,11 @@
+UXTerm*renderFont: true
+UXTerm*faceName: DejaVu Sans Mono
+UXTerm*faceSize: 11
+UXTerm*background: black
+UXTerm*foreground: white
+UXTerm*cursorColor: white
+UXTerm*VT100.geometry: 120x40
+
+UXTerm*utf8:               2
+UXTerm*selectToClipboard: true
+
