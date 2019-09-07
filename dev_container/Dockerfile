@@ -1,24 +1,24 @@
 from debian:10
 
-ENV UID="1000" \
-    UNAME="developer" \
-    GID="1000" \
-    SHELL="/bin/bash" \
+# UID="1000" \
+# GID="1000" \
+ENV UNAME="developer" \
+    SHELL="/usr/bin/zsh" \
     UHOME=/home/developer \
-    TERM=xterm-256color
+    TERM=xterm-256color \
+    LANG=en_US.UTF-8 \
+    LC_CTYPE=en_US.UTF-8
 
-RUN apt-get update && apt-get install -y git tmux sudo
-
-RUN apt-get install -y python3 python3-pip ripgrep
+RUN apt-get update && apt-get install -y git locales \
+    python3 python3-pip ripgrep sudo tmux zsh \
+    ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
 
 # Build neovim from source
-RUN apt-get install -y ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
 RUN git clone https://github.com/neovim/neovim.git /tmp/nvim && \
     cd /tmp/nvim && \
     git checkout stable && \
     make && make install
 
-RUN apt install -y locales
 RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment && \
     echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
     echo "LANG=en_US.UTF-8" > /etc/locale.conf && \
@@ -45,12 +45,14 @@ RUN cd $UHOME && \
     mkdir $UHOME/.config/nvim && \
     cp $UHOME/dotfiles/redir/.config/nvim/init.vim $UHOME/.config/nvim/init.vim
 
-RUN chown $UID:$GID -R $UHOME
+#RUN chown $UID:$GID -R $UHOME
+RUN chown $UNAME -R $UHOME
 
 ENV NVM_DIR /usr/local/nvm
 ENV NODE_VERSION 10
 
-RUN rm /bin/sh && sudo ln -s /bin/bash /bin/sh
+#RUN rm /bin/sh && sudo ln -s /bin/bash /bin/sh
+RUN rm /bin/sh && sudo ln -s /usr/bin/zsh /bin/sh
 RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.30.1/install.sh | bash \
     && source $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
@@ -59,19 +61,39 @@ RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.30.1/install.sh | b
 
 USER $UNAME
 WORKDIR $UHOME
+
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+RUN rm $UHOME/.zshrc && cp $UHOME/dotfiles/redir/.zshrc $UHOME/.zshrc
+
 RUN pip3 install --user pynvim
 RUN touch .bashrc
 RUN $NVM_DIR/install.sh
-RUN source $UHOME/.bashrc \
+#RUN source $UHOME/.bashrc \
+    #&& nvim +PlugInstall +UpdateRemotePlugins +qall \
+    #&& nvim +CocUpdateSync +qall
+#RUN source $UHOME/.bashrc \
+    #&& cd $UHOME/.config/coc/extensions \
+    #&& npm install coc-eslint coc-json coc-css coc-tsserver coc-prettier \
+    #coc-lists coc-yank coc-vimlsp coc-python \
+    #--global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
+RUN source $UHOME/.zshrc \
     && nvim +PlugInstall +UpdateRemotePlugins +qall \
     && nvim +CocUpdateSync +qall
-
-RUN source $UHOME/.bashrc \
+RUN source $UHOME/.zshrc \
     && cd $UHOME/.config/coc/extensions \
     && npm install coc-eslint coc-json coc-css coc-tsserver coc-prettier \
     coc-lists coc-yank coc-vimlsp coc-python \
     --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
 
-RUN sudo chsh -s /bin/bash developer
+RUN sudo chsh -s /usr/bin/zsh $UNAME
 
-ENTRYPOINT ["tmux", "new", "-s", "TMUX"]
+#RUN git clone https://github.com/powerline/fonts.git --depth=1 \
+    #&& cd fonts \
+    #&& sudo ./install.sh \
+    #&& cd .. \
+    #&& rm -rf fonts
+
+RUN mkdir $UHOME/workspace
+WORKDIR $UHOME/workspace
+ENTRYPOINT ["tmux", "-2", "new", "-s", "TMUX"]
+#ENTRYPOINT /usr/bin/zsh

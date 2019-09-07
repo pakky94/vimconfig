@@ -20,6 +20,9 @@ if has('win32') || has ('win64')
 else
     let $VIMHOME = $HOME."/dotfiles/vim"
     let $VIMRC = $VIMHOME."/vimrc"
+    if filereadable("/usr/local/bin/python3.7")
+        let g:python3_host_prog = "/usr/local/bin/python3.7"
+    endif
 endif
 " }}}
 " Vim-plug and plugins {{{
@@ -106,6 +109,7 @@ set cmdheight=2
 
 set signcolumn=yes
 "set splitright
+set inccommand=split
 " }}}
 " Coloring {{{
 set termguicolors
@@ -493,7 +497,7 @@ let g:startify_lists = [
     \ { 'type': 'commands',  'header': ['   Commands']       },
     \ ]
 let g:startify_bookmarks = [
-    \ { 'c': '~/Dotfiles/vim/vimrc' },
+    \ { 'c': '~/dotfiles/vim/vimrc' },
     \ { 'b': '~/Documents/tutorials/react-node/bwm-react/' },
     \ { 'n': '~/Documents/tutorials/rncourse/' },
     \ ]
