@@ -20,9 +20,6 @@ if has('win32') || has ('win64')
 else
     let $VIMHOME = $HOME."/dotfiles/vim"
     let $VIMRC = $VIMHOME."/vimrc"
-    if filereadable("/usr/local/bin/python3.7")
-        let g:python3_host_prog = "/usr/local/bin/python3.7"
-    endif
 endif
 " }}}
 " Vim-plug and plugins {{{
