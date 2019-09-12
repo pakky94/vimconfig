@@ -1,2 +1,2 @@
-xrdb -load /home/mpacchialat/.Xresources
+xrdb -load /home/mpacchialat/dotfiles/bin/uxterm_resources
 uxterm -e zsh

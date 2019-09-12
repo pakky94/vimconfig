@@ -1,6 +1,6 @@
 !UXTerm*renderFont: true
 !UXTerm*faceName: DejaVu Sans Mono
-UXTerm*faceName: xft:DejaVu Sans Mono for Powerline:size=11,xft:SimHei:size=11
+UXTerm*faceName: xft:DejaVu Sans Mono for Powerline:size=12,xft:SimHei:size=12
 !UXTerm*faceSize: 11
 !UXTerm*background: black
 !UXTerm*foreground: white
