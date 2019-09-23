@@ -109,7 +109,7 @@ set cmdheight=2
 
 set signcolumn=yes
 "set splitright
-set inccommand=split
+set inccommand=nosplit
 " }}}
 " Coloring {{{
 if has("termguicolors")
