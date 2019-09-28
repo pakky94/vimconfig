@@ -312,6 +312,34 @@ command! -bar -nargs=0 -range=% TrimSpaces <line1>,<line2>call TrimSpaces()
 " delete trailing whitespaces with <S-F5>
 "nnoremap <S-F5>   :TrimSpaces<CR>
 "vnoremap <S-F5>   :TrimSpaces<CR>
+" strips trailing whitespace at the end of files. this
+" is called on buffer write in the autogroup above.
+function! <SID>StripTrailingWhitespaces()
+    " save last search & cursor position
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    %s/\s\+$//e
+    let @/=_s
+    call cursor(l, c)
+endfunction
+
+" functions to manuallly highlight and delete trailing whitespaces
+function! ShowSpaces(...)
+  let @/='\v(\s+$)|( +\ze\t)'
+  let oldhlsearch=&hlsearch
+  if !a:0
+    let &hlsearch=!&hlsearch
+  else
+    let &hlsearch=a:1
+  end
+  return oldhlsearch
+endfunction
+function! TrimSpaces() range
+  let oldhlsearch=ShowSpaces(1)
+  execute a:firstline.",".a:lastline."substitute ///gec"
+  let &hlsearch=oldhlsearch
+endfunction
 " }}}
 " Commands alias {{{
 cnoreabbrev vres vertical resize
@@ -479,6 +507,10 @@ autocmd Filetype python               setlocal foldmethod=indent
 
 call coc#add_extension('coc-python')
 " }}}
+" Markdown {{{
+autocmd FileType markdown cnoreabbrev ctrjs !pandoc -t revealjs -s --mathjax="$HOME/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" -o %.html % -V revealjs-url=$HOME/reveal.js
+autocmd FileType markdown cnoreabbrev ctpdf !pandoc % -o %.pdf
+" }}}
 " Emmet-vim {{{
 let g:user_emmet_install_global = 0
 " }}}
@@ -534,36 +566,6 @@ if has('nvim')
 endif
 let g:startify_custom_header = map(g:startify_ascii, '"     ".v:val')
 " }}}
-" Custom Functions {{{
-" strips trailing whitespace at the end of files. this
-" is called on buffer write in the autogroup above.
-function! <SID>StripTrailingWhitespaces()
-    " save last search & cursor position
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
-    %s/\s\+$//e
-    let @/=_s
-    call cursor(l, c)
-endfunction
-
-" functions to manuallly highlight and delete trailing whitespaces
-function! ShowSpaces(...)
-  let @/='\v(\s+$)|( +\ze\t)'
-  let oldhlsearch=&hlsearch
-  if !a:0
-    let &hlsearch=!&hlsearch
-  else
-    let &hlsearch=a:1
-  end
-  return oldhlsearch
-endfunction
-function! TrimSpaces() range
-  let oldhlsearch=ShowSpaces(1)
-  execute a:firstline.",".a:lastline."substitute ///gec"
-  let &hlsearch=oldhlsearch
-endfunction
-""" }}}
 " Denite {{{
 try
     " Custom options for Denite
@@ -668,6 +670,18 @@ endtry
 let g:auto_save_in_insert_mode = 0 " do not save while in insert mode
 let g:auto_save_no_updatetime = 1 " do not change the 'updatetime' opiton
 " }}}
+" Rainbow {{{
+let g:rainbow_conf = {
+\	'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
+\	'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
+\	'guis': [''],
+\	'cterms': [''],
+\	'operators': '_,\|+\|-\|*\|\/\|===\|!==_',
+\	'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+\}
+let g:rainbow_active = 1
+let g:table_mode_map_prefix = '<leader><leader>t'
+" }}}
 " MonkeyTerminal {{{
 " With this function you can reuse the same terminal in neovim.
 " You can toggle the terminal and also send a command to the same terminal.
@@ -749,18 +763,5 @@ if !exists('g:undotree_SetFocusWhenToggle')
     let g:undotree_SetFocusWhenToggle = 1
 endif
 
-autocmd FileType markdown cnoreabbrev ctrjs !pandoc -t revealjs -s --mathjax="$HOME/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" -o %.html % -V revealjs-url=$HOME/reveal.js
-autocmd FileType markdown cnoreabbrev ctpdf !pandoc % -o %.pdf
 
-
-let g:rainbow_conf = {
-\	'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
-\	'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
-\	'guis': [''],
-\	'cterms': [''],
-\	'operators': '_,\|+\|-\|*\|\/\|===\|!==_',
-\	'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
-\}
-let g:rainbow_active = 1
-let g:table_mode_map_prefix = '<leader><leader>t'
 
