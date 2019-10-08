@@ -5,7 +5,7 @@ if has('win32') || has ('win64')
     let $SHELL = '"C:\\Program Files\\PowerShell\\6\\pwsh.exe"'
     let $VIMHOME = $HOME."\\dotfiles\\vim"
     let $VIMRC = $VIMHOME."\\vimrc"
-    let g:python3_host_prog = "C:\\Python37\\python.exe"
+    "let g:python3_host_prog = "C:\\Python37\\python.exe"
     let $PATH .= ';'.$HOME.'/vimfiles/bin'
     "set shell=pwsh.exe
     "set shellcmdflag=-NoProfile\ -NoLogo\ -NonInteractive\ -Command

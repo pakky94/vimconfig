@@ -8,6 +8,8 @@ sudo pacman -S --noconfirm pacaur python2 python2-pip python3 python-pip libxml2
     keepassxc ksshaskpass pass \
     ibus 
 
+sudo pacman -S noto-fonts-cjk noto-fonts-emoji noto-fonts
+
 pacaur -S --noconfirm otf-stix mozc ibus-mozc \
     megasync pcloud-drive 
 
