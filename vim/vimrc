@@ -28,7 +28,7 @@ call plug#begin($VIMHOME.'/bundle')
 " themes and ui
 "Plug 'altercation/vim-colors-solarized'
 Plug 'joshdick/onedark.vim'
-"Plug 'lifepillar/vim-solarized8'
+Plug 'lifepillar/vim-solarized8'
 "Plug 'aonemd/kuroi.vim'
 "Plug 'dracula/vim', { 'as': 'dracula' }
 "Plug 'ayu-theme/ayu-vim'
@@ -121,10 +121,10 @@ endif
 set background=dark
 set t_Co=256
 "let ayucolor="dark"
-colorscheme onedark
+colorscheme solarized8_flat
 
 "let g:airline_theme='ayu_dark'
-let g:airline_theme='onedark'
+let g:airline_theme='solarized'
 let g:airline#extensions#coc#enabled = 1
 let g:airline#extensions#branch#enabled = 0
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
