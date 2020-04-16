@@ -27,6 +27,7 @@ done
 alias tmux="tmux -2"
 alias t="nvm use default; tmux -2 new-session -A -s lobby"
 alias explorer="explorer.exe ."
+alias ll="ls --group-directories-first --time-style=long-iso -ghF"
 
 #source ~/dotfiles/zsh/functionsrc
 #source ~/dotfiles/zsh/variablesrc
