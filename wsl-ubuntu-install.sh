@@ -1,19 +1,27 @@
-cp -a ./redir/. ~/
-sudo add-apt-repository ppa:neovim-ppa/unstable
 sudo apt-get update && sudo apt-get upgrade -y
-sudo apt-get install neovim python-dev python-pip python3-dev python3-pip -y
-pip install --user pynvim
-pip3 install --user pynvim
+sudo apt-get install zsh -y
 
-curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-sudo apt-get install -y nodejs -y
-sudo npm install -g neovim
+sudo apt-get install --no-install-recommends make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev -y
 
-curl -LO https://github.com/BurntSushi/ripgrep/releases/download/11.0.2/ripgrep_11.0.2_amd64.deb
-sudo dpkg -i ripgrep_11.0.2_amd64.deb
+cd ~/
+git clone https://github.com/nvm-sh/nvm.git .nvm
+cd ~/.nvm
+git checkout v0.35.3
+.nvm.sh
 
-sudo nvim +PlugInstall +UpdateRemotePlugins +qall
-sudo nvim +qall
+cd ~/
+git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 
-sudo chown -R 1000:1000 /home/$USER/.npm
+sudo chsh $USER -s zsh
+
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
+curl -LO https://github.com/BurntSushi/ripgrep/releases/download/12.0.1/ripgrep_12.0.1_amd64.deb
+sudo dpkg -i ripgrep_12.0.1_amd64.deb
+rm ripgrep_12.0.1_amd64.deb
+
+cp ./redir/.zshrc_wsl ~/.zshrc
+cp ./redir/.tmux.conf ~/.tmux.conf
+
+sudo chown -R 1000:1000 /home/$USER/.nvm
 sudo chown -R $USER:$(id -gn $USER) /home/$USER/.config

@@ -1,0 +1,2 @@
+export SSH_AUTH_SOCK=/mnt/c/wsl-ssh-agent/ssh-agent.sock
+source ~/dotfiles/zsh/zshrc_wsl
