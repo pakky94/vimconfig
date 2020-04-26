@@ -19,11 +19,24 @@
 #workspace 7 output DP-2
 #workspace 8 output DP-2
 
+# Define names for default workspaces for which we configure key bindings later on.
+# We use variables to avoid repeating the names in multiple places.
+set $ws1 "1 "
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10: Music"
+
 # Assign applications to workspaces
 #  xprop | grep "CLASS"
 #assign [class="Firefox"] 1
 #assign [class="sublime_text"] 2
-assign [class="Clementine"] 10
+assign [class="Clementine"] $ws10
 
 set $black       #212121
 set $darkblack   #000000
@@ -57,12 +70,6 @@ font pango:Helvetica Neue, FontAwesome 11
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
-
-# Start a terminal
-bindsym $mod+Return exec alacritty
-
-# Start firefox
-bindsym $mod+b exec firefox
 
 # Kill focused window
 bindsym $mod+Shift+q kill
@@ -136,28 +143,52 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 
 # switch to workspace
-bindsym $mod+1 workspace 1
-bindsym $mod+2 workspace 2
-bindsym $mod+3 workspace 3
-bindsym $mod+4 workspace 4
-bindsym $mod+5 workspace 5
-bindsym $mod+6 workspace 6
-bindsym $mod+7 workspace 7
-bindsym $mod+8 workspace 8
-bindsym $mod+9 workspace 9
-bindsym $mod+0 workspace 10
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace 1
-bindsym $mod+Shift+2 move container to workspace 2
-bindsym $mod+Shift+3 move container to workspace 3
-bindsym $mod+Shift+4 move container to workspace 4
-bindsym $mod+Shift+5 move container to workspace 5
-bindsym $mod+Shift+6 move container to workspace 6
-bindsym $mod+Shift+7 move container to workspace 7
-bindsym $mod+Shift+8 move container to workspace 8
-bindsym $mod+Shift+9 move container to workspace 9
-bindsym $mod+Shift+0 move container to workspace 10
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
+
+## switch to workspace
+#bindsym $mod+1 workspace 1
+#bindsym $mod+2 workspace 2
+#bindsym $mod+3 workspace 3
+#bindsym $mod+4 workspace 4
+#bindsym $mod+5 workspace 5
+#bindsym $mod+6 workspace 6
+#bindsym $mod+7 workspace 7
+#bindsym $mod+8 workspace 8
+#bindsym $mod+9 workspace 9
+#bindsym $mod+0 workspace 10
+
+## move focused container to workspace
+#bindsym $mod+Shift+1 move container to workspace 1
+#bindsym $mod+Shift+2 move container to workspace 2
+#bindsym $mod+Shift+3 move container to workspace 3
+#bindsym $mod+Shift+4 move container to workspace 4
+#bindsym $mod+Shift+5 move container to workspace 5
+#bindsym $mod+Shift+6 move container to workspace 6
+#bindsym $mod+Shift+7 move container to workspace 7
+#bindsym $mod+Shift+8 move container to workspace 8
+#bindsym $mod+Shift+9 move container to workspace 9
+#bindsym $mod+Shift+0 move container to workspace 10
 
 # Move focus between screens
 bindsym $mod+Alt+h focus output left
@@ -189,6 +220,11 @@ mode "resize" {
         bindsym k resize shrink height 10 px or 5 ppt
         bindsym l resize grow width 10 px or 5 ppt
 
+        bindsym Shift+h resize shrink width 50 px or 15 ppt
+        bindsym Shift+j resize grow height 50 px or 15 ppt
+        bindsym Shift+k resize shrink height 50 px or 15 ppt
+        bindsym Shift+l resize grow width 50 px or 15 ppt
+
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 5 ppt
         bindsym Down resize grow height 10 px or 5 ppt
@@ -198,29 +234,30 @@ mode "resize" {
         # back to normal: Enter or Escape
         bindsym Return mode "default"
         bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
 }
 
 bindsym $mod+r mode "resize"
 
 # i3bar
-bar {
-        verbose yes
-        position top 
-        status_command i3blocks
-        #status_command i3status
+#bar {
+        #verbose yes
+        #position top 
+        #status_command i3blocks
+        ##status_command i3status
         #i3bar_command i3bar -t
-        tray_output none
-        height 18
-        font pango: JetBrains Mono, 9
-        colors {
-          statusline #ffffff
-          background $transparent
-        }
-}
+        #tray_output none
+        #height 18
+        #font pango: JetBrains Mono, 9
+        #colors {
+          #statusline #ffffff
+          #background $transparent
+        #}
+#}
 
 # Starting things with i3
 # exec --no-startup-id xcompmgr -C &    # Bare compositor to allow transparency
-exec --no-startup-id picom -C &    # Bare compositor to allow transparency
+exec --no-startup-id picom &    # Bare compositor to allow transparency
 for_window [class="yakuake"] floating enable
 for_window [class="systemsettings"] floating enable
 exec --no-startup-id feh --bg-fill ~/Pictures/wallpapers/space1.jpg
@@ -233,9 +270,6 @@ for_window [title="Bureau — Plasma"] kill, floating enable, border none
 
 #exec_always --no-startup-id $HOME/launch_polybar.sh
 
-exec syncthing -no-browser
-exec keepassxc
-exec joplin
 
 ## Avoid tiling popups, dropdown windows from plasma
 # for the first time, manually resize them, i3 will remember the setting for floating windows
@@ -247,6 +281,9 @@ for_window [class="krunner"] floating enable, border none
 for_window [class="Kmix"] floating enable, border none
 for_window [class="Klipper"] floating enable, border none
 for_window [class="Plasmoidviewer"] floating enable, border none
+for_window [class="plasmashell" window_type="notification"] floating enable, border none #, move right 700px, move down 450px
+no_focus [class="plasmashell" window_type="notification"] 
+
 
 
 for_window [class="kdeconnectd"] floating enable
@@ -313,3 +350,18 @@ mode "$mode_gaps_outer" {
         bindsym Escape mode "default"
 }
 
+# Startup apps
+exec ibus-daemon --xim -drx
+exec syncthing -no-browser
+exec keepassxc
+exec joplin-desktop
+
+# Start a terminal
+#bindsym $mod+Return exec termite
+bindsym $mod+Return exec alacritty
+
+# Application shortcuts
+bindsym $mod+b exec firefox
+bindsym $mod+Shift+v exec code
+bindsym $mod+Shift+d exec dolphin
+bindsym $mod+Shift+n exec joplin-desktop

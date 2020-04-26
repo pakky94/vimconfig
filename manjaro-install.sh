@@ -1,15 +1,20 @@
 sudo pacman -Syu --noconfirm
 
-sudo pacman -R manjaro-application-utility pamac-cli pamac-common pamac-gtk pamac-snap-plugin pamac-tray-appindicator
+sudo pacman -R --noconfirm manjaro-application-utility pamac-cli pamac-common pamac-gtk pamac-snap-plugin pamac-tray-appindicator yakuake
 
-sudo pacman -S --noconfirm alacritty neovim tmux yay zsh \
-	visual-studio-code-bin \
-	i3blocks i3-gaps i3status feh picom \
-	keepassxc syncthing \
-	rofi \
-	ibus
+sudo pacman -S --noconfirm alacritty latte-dock neovim ripgrep tmux yay zsh \
+    visual-studio-code-bin \
+    i3blocks i3-gaps i3status feh picom \
+    keepassxc syncthing \
+    rofi \
+    ibus \
+    meson
 
-yay -S --noconfirm ttf-jetbrains-mono
+yay -S --noconfirm ttf-jetbrains-mono ttf-font-awesome \
+    ibus-mozc ibus-qt \
+    gamemode lib32-gamemode
+
+#yay -S --noconfirm xf86-input-wacom wacom-utility
 
 # install Oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
@@ -23,7 +28,11 @@ git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 
 # create redirects/links to config files to ~/dotfiles
 
+ln ~/dotfiles/X/.XCompose ~/.XCompose
 ln ~/dotfiles/X/.Xmodmap ~/.Xmodmap
+
+ln ~/dotfiles/alacritty.yml ~/.alacritty.yml
+
 echo "source ~/dotfiles/zsh/zshrc" > ~/.zshrc
 echo "source ~/dotfiles/tmux.conf" > ~/.tmux.conf
 echo "\n\n#include ~/dotfiles/X/.Xresources" >> ~/.Xresources
@@ -31,6 +40,9 @@ echo "\n\n#include ~/dotfiles/X/.Xresources" >> ~/.Xresources
 
 mkdir ~/.config/nvim
 cp ~/dotfiles/vim/init_lite.vim ~/.config/nvim/init.vim
+
+mkdir ~/.config/termite
+ln ~/dotfiles/termite/config ~/.config/termite/config
 
 mkdir ~/.config/rofi
 ln ~/.dotfiles/rofi.config ~/.config/rofi/config

@@ -3,11 +3,16 @@ export EDITOR=nvim
 export SUDO_EDITOR=nvim
 export PATH=$PATH:$HOME/.local/bin:$HOME/node/bin:$HOME/.cargo/bin
 
-ZSH_THEME="agnoster"
+ZSH_THEME="ys"
 
 plugins=(git nvm vi-mode pyenv)
 
+eval $(dircolors ~/dotfiles/dircolors)
+
 source $ZSH/oh-my-zsh.sh
+
+#LS_COLORS=$LS_COLORS:'di=0;35:'
+#export LS_COLORS
 
 #export NVM_DIR="~/.nvm"
 #[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use # This loads nvm
