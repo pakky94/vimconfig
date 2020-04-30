@@ -5,16 +5,19 @@ sudo pacman -R --noconfirm manjaro-application-utility pamac-cli pamac-common pa
 sudo pacman -S --noconfirm alacritty latte-dock neovim ripgrep tmux yay zsh \
     visual-studio-code-bin \
     i3blocks i3-gaps i3status feh picom \
-    keepassxc syncthing \
+    flatpak keepassxc syncthing \
     rofi \
     ibus \
     meson
 
-yay -S --noconfirm ttf-jetbrains-mono ttf-font-awesome \
+yay -S --noconfirm ttf-jetbrains-mono ttf-font-awesome-4 \
     ibus-mozc ibus-qt \
     gamemode lib32-gamemode
 
 #yay -S --noconfirm xf86-input-wacom wacom-utility
+
+flatpak install flathub org.kiwix.desktop
+wget -O ~/Documents/archlinux_wiki.zim http://download.kiwix.org/zim/archlinux_en_all_maxi.zim
 
 # install Oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"

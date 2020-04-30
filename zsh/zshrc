@@ -34,6 +34,7 @@ alias mutt="neomutt"
 alias tmux="tmux -2"
 alias t="nvm use default; tmux -2 new-session -A -s lobby"
 alias ll="ls --group-directories-first --time-style=long-iso -ghF"
+alias alhere="alacritty --working-directory='.' &"
 
 #source ~/dotfiles/zsh/functionsrc
 #source ~/dotfiles/zsh/variablesrc
