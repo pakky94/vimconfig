@@ -1,3 +1,4 @@
+alias ll="exa --long --header --git --group-directories-first"
 abbr -a e nvim
 abbr -a s "bash -c"
 

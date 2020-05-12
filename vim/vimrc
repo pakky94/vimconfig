@@ -20,6 +20,9 @@ if has('win32') || has ('win64')
 else
     let $VIMHOME = $HOME."/dotfiles/vim"
     let $VIMRC = $VIMHOME."/vimrc"
+    if &shell =~# 'fish$'
+        set shell=sh
+    endif
 endif
 " }}}
 " Vim-plug and plugins {{{
