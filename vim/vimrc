@@ -257,7 +257,7 @@ nnoremap k gk
 " Leader keymaps {{{
 let mapleader = " "
 "set timeoutlen=800 " timeout for next key before executing commands
-nnoremap <leader><leader> :bprevious<cr>
+nnoremap <leader><leader> :b#<cr>
 
 " quick close by ;q
 nnoremap <leader>q :q<cr>

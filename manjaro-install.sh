@@ -7,14 +7,14 @@ sudo pacman -Syu --noconfirm
 sudo pacman -R --noconfirm manjaro-application-utility pamac-cli pamac-common pamac-gtk pamac-snap-plugin pamac-tray-appindicator yakuake
 
 sudo pacman -S --noconfirm alacritty exa fish neovim ripgrep tmux yay zsh \
-    feh i3blocks i3-gaps i3status latte-dock picom \
+    feh i3blocks i3-gaps i3status picom \
     flatpak keepassxc syncthing \
     rofi \
     ibus \
     meson extra-cmake-modules
 
 yay -S --noconfirm ttf-jetbrains-mono ttf-font-awesome-4 \
-    syncthingtray visual-studio-code-bin \
+    joplin syncthingtray visual-studio-code-bin \
     ibus-mozc ibus-qt \
     gamemode lib32-gamemode
 
