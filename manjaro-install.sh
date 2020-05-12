@@ -80,6 +80,8 @@ flatpak install -y flathub \
 
 
 # install Oh-my-fish
+ln -s ~/dotfiles/fish/fish ~/.config
+ln -s ~/dotfiles/fish/omf ~/.config
 curl -L https://get.oh-my.fish | fish
 sudo chsh -s /usr/bin/fish pakky
 
