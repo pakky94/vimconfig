@@ -3,11 +3,6 @@
 # (No) Title Bars
 # for_window [class="^.*"] border pixel 0
 
-# Gaps
-#gaps inner 10
-#gaps outer 0
-#smart_gaps on
-
 # Assign workspaces to screens
 #  On E560, eDP-1 is the first display, while DP-2 is VGA output
 #workspace 1 output eDP-1
@@ -275,8 +270,7 @@ bindsym $mod+Shift+s mode "$mode_system"
 #}
 
 # Starting things with i3
-# exec --no-startup-id xcompmgr -C &    # Bare compositor to allow transparency
-exec --no-startup-id picom &    # Bare compositor to allow transparency
+exec_always --no-startup-id picom -bc    # Bare compositor to allow transparency
 for_window [class="yakuake"] floating enable
 for_window [class="systemsettings"] floating enable
 exec --no-startup-id feh --bg-fill ~/Pictures/wallpapers/space1.jpg
@@ -321,13 +315,14 @@ client.placeholder      #000000 #0C0C0C #FFFFFF #000000   #0C0C0C
 for_window [class="^.*"] border pixel 2
 
 # Smart Gaps
-# smart_gaps on
+smart_gaps on
 
 # Smart Borders
-# smart_borders on
+smart_borders on
 
 # Set inner/outer gaps
-gaps inner 8
+#gaps inner 8
+gaps inner 0
 gaps outer 0
 
 # Gaps mode

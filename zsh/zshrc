@@ -3,13 +3,17 @@ export EDITOR=nvim
 export SUDO_EDITOR=nvim
 export PATH=$PATH:$HOME/.local/bin:$HOME/node/bin:$HOME/.cargo/bin
 
+SAVEHIST=10000
 ZSH_THEME="ys"
 
-plugins=(git nvm vi-mode pyenv)
+plugins=(git history nvm vi-mode pyenv)
 
 eval $(dircolors ~/dotfiles/dircolors)
 
 source $ZSH/oh-my-zsh.sh
+
+bindkey '^[OA' history-beginning-search-backward
+bindkey '^[OB' history-beginning-search-forward
 
 #LS_COLORS=$LS_COLORS:'di=0;35:'
 #export LS_COLORS
@@ -29,6 +33,7 @@ for cmd in "${NODE_GLOBALS[@]}"; do
     eval "${cmd}(){ unset -f ${NODE_GLOBALS}; load_nvm; ${cmd} \$@ }"
 done
 
+alias vim="nvim"
 alias gst="nvim '+Gedit :'"
 alias mutt="neomutt"
 alias tmux="tmux -2"

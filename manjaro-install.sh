@@ -1,33 +1,33 @@
+#!/bin/bash
+# Avoids getting multiple password requests for sudo
+trap "exit" INT TERM; trap "kill 0" EXIT; sudo -v || exit $?; sleep 1; while true; do sleep 60; sudo -nv; done 2>/dev/null &
+
 sudo pacman -Syu --noconfirm
 
 sudo pacman -R --noconfirm manjaro-application-utility pamac-cli pamac-common pamac-gtk pamac-snap-plugin pamac-tray-appindicator yakuake
 
-sudo pacman -S --noconfirm alacritty latte-dock neovim ripgrep tmux yay zsh \
-    visual-studio-code-bin \
+sudo pacman -S --noconfirm alacritty fish latte-dock neovim ripgrep tmux yay zsh \
     i3blocks i3-gaps i3status feh picom \
     flatpak keepassxc syncthing \
     rofi \
     ibus \
-    meson
+    meson extra-cmake-modules
 
 yay -S --noconfirm ttf-jetbrains-mono ttf-font-awesome-4 \
+    syncthingtray visual-studio-code-bin \
     ibus-mozc ibus-qt \
     gamemode lib32-gamemode
 
 #yay -S --noconfirm xf86-input-wacom wacom-utility
 
-flatpak install flathub org.kiwix.desktop
 wget -O ~/Documents/archlinux_wiki.zim http://download.kiwix.org/zim/archlinux_en_all_maxi.zim
 
 # install Oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-
-sudo chsh -s /usr/bin/zsh pakky
-
+#sudo chsh -s /usr/bin/zsh pakky
 
 git clone https://github.com/nvm-sh/nvm.git ~/.nvm
 git clone https://github.com/pyenv/pyenv.git ~/.pyenv
-
 
 # create redirects/links to config files to ~/dotfiles
 
@@ -42,15 +42,16 @@ echo "\n\n#include ~/dotfiles/X/.Xresources" >> ~/.Xresources
 
 
 mkdir ~/.config/nvim
-cp ~/dotfiles/vim/init_lite.vim ~/.config/nvim/init.vim
+#cp ~/dotfiles/vim/init_lite.vim ~/.config/nvim/init.vim
+cp ~/dotfiles/vim/init.vim ~/.config/nvim/init.vim
 
-mkdir ~/.config/termite
-ln ~/dotfiles/termite/config ~/.config/termite/config
+#mkdir ~/.config/termite
+#ln ~/dotfiles/termite/config ~/.config/termite/config
 
 mkdir ~/.config/rofi
-ln ~/.dotfiles/rofi.config ~/.config/rofi/config
+ln ~/dotfiles/rofi.config ~/.config/rofi/config
 
-ln ~/.dotfiles/picom/picom.conf ~/.config/picom.conf
+ln ~/dotfiles/picom/picom.conf ~/.config/picom.conf
 
 # i3 config
 
@@ -63,7 +64,24 @@ sudo mv /usr/bin/ksplashqml /usr/bin/ksplashqml.old
 sudo cp ~/dotfiles/i3/plasma-i3.desktop /usr/share/xsessions/plasma-i3.desktop
 
 
+# Install python 3.8.2
+~/.pyenv/bin/pyenv install 3.8.2
+
+# Install latest lts version of nodejs
+source ~/.nvm/nvm.sh
+nvm install --lts
+
+
 nvim +PlugInstall +UpdateRemotePlugins +qall
+
+flatpak install -y flathub \
+    org.kiwix.desktop \
+    org.jdownloader.JDownloader \
+
+
+# install Oh-my-fish
+curl -L https://get.oh-my.fish | fish
+sudo chsh -s /usr/bin/fish pakky
 
 
 # sudo pacman -S --noconfirm pacaur python2 python2-pip python3 python-pip libxml2 libxslt zlib \

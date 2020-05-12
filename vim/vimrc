@@ -27,8 +27,9 @@ call plug#begin($VIMHOME.'/bundle')
 
 " themes and ui
 "Plug 'altercation/vim-colors-solarized'
-Plug 'joshdick/onedark.vim'
-Plug 'lifepillar/vim-solarized8'
+Plug 'haishanh/night-owl.vim'
+"Plug 'joshdick/onedark.vim'
+"Plug 'lifepillar/vim-solarized8'
 "Plug 'aonemd/kuroi.vim'
 "Plug 'dracula/vim', { 'as': 'dracula' }
 "Plug 'ayu-theme/ayu-vim'
@@ -67,10 +68,12 @@ Plug 'luochen1990/rainbow'
 Plug 'jiangmiao/auto-pairs'
 Plug 'mattn/emmet-vim'
 
+Plug 'airblade/vim-rooter'
+
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'vimwiki/vimwiki'
 if has('nvim')
-    Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'Shougo/denite.nvim'
     "Plug 'kizza/actionmenu.nvim'
 endif
@@ -121,7 +124,7 @@ endif
 set background=dark
 set t_Co=256
 "let ayucolor="dark"
-colorscheme solarized8_flat
+colorscheme night-owl
 
 "let g:airline_theme='ayu_dark'
 let g:airline_theme='solarized'
@@ -223,7 +226,7 @@ nnoremap <C-l> :nohl<cr><C-l>
 nnoremap gV `[v`]
 " navigate and close buffers
 "nnoremap <C-n> :bnext<cr>
-"nnoremap <C-p> :bprevious<cr>
+"nnoremap <leader><leader> :bprevious<cr>
 "nnoremap <C-x> :bdelete<cr>
 " resize window with arrow keys
 nnoremap <Left> :vertical resize +2<CR>
@@ -251,6 +254,7 @@ nnoremap k gk
 " Leader keymaps {{{
 let mapleader = " "
 "set timeoutlen=800 " timeout for next key before executing commands
+nnoremap <leader><leader> :bprevious<cr>
 
 " quick close by ;q
 nnoremap <leader>q :q<cr>
@@ -270,8 +274,8 @@ nnoremap <leader>u :UndotreeToggle<CR>
 " save session
 "nnoremap <leader>s :mksession<CR>
 " edit vimrc/zshrc and load vimrc bindings
-nnoremap <leader><leader>re :vsp $VIMRC<CR>
-nnoremap <leader><leader>rs :source $VIMRC<CR>
+"nnoremap <leader><leader>re :vsp $VIMRC<CR>
+"nnoremap <leader><leader>rs :source $VIMRC<CR>
 " Smart way to move between windows
 "nnoremap <leader>wh <C-w>h
 "nnoremap <leader>wj <C-w>j
@@ -462,7 +466,7 @@ try
     " Call yank history
     nnoremap <silent> <space>p  :<C-u>CocList -A --normal yank<CR>
     " Resume latest coc list
-    nnoremap <silent> <space><space>p  :<C-u>CocListResume<CR>
+    nnoremap <silent> <space><C-p>  :<C-u>CocListResume<CR>
     " list all vim commands
     nnoremap <silent> <space>P  :<C-u>CocList vimcommands<CR>
 
@@ -635,7 +639,7 @@ try
     nnoremap <leader>b :<C-u>Denite buffer -split=floating -winminheight=20<CR>
     nnoremap <leader>8 :<C-u>DeniteCursorWord grep:. -split=floating -winminheight=20<CR>
     nnoremap <leader>/ :<C-u>Denite grep:.::! -split=floating -winminheight=20 -start-filter<CR>
-    nnoremap <leader><Space>/ :<C-u>DeniteBufferDir grep:.<CR>
+    "nnoremap <leader><leader>/ :<C-u>DeniteBufferDir grep:.<CR>
     "nnoremap <leader>r :<C-u>Denite -resume -cursor-pos=+1<CR>
     nnoremap <leader><C-r> :<C-u>Denite register:.<CR>
     " references source from LanguageClient
@@ -680,7 +684,7 @@ let g:rainbow_conf = {
 \	'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
 \}
 let g:rainbow_active = 1
-let g:table_mode_map_prefix = '<leader><leader>t'
+"let g:table_mode_map_prefix = '<leader><leader>t'
 " }}}
 " MonkeyTerminal {{{
 " With this function you can reuse the same terminal in neovim.
