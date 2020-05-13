@@ -31,10 +31,10 @@ git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 
 # create redirects/links to config files to ~/dotfiles
 
-ln ~/dotfiles/X/.XCompose ~/.XCompose
-ln ~/dotfiles/X/.Xmodmap ~/.Xmodmap
+ln -s ~/dotfiles/X/.XCompose ~/.XCompose
+ln -s ~/dotfiles/X/.Xmodmap ~/.Xmodmap
 
-ln ~/dotfiles/alacritty.yml ~/.alacritty.yml
+ln -s ~/dotfiles/alacritty.yml ~/.alacritty.yml
 
 echo "source ~/dotfiles/zsh/zshrc" > ~/.zshrc
 echo "source ~/dotfiles/tmux.conf" > ~/.tmux.conf
@@ -49,16 +49,16 @@ cp ~/dotfiles/vim/init.vim ~/.config/nvim/init.vim
 #ln ~/dotfiles/termite/config ~/.config/termite/config
 
 mkdir ~/.config/rofi
-ln ~/dotfiles/rofi.config ~/.config/rofi/config
+ln -s ~/dotfiles/rofi.config ~/.config/rofi/config
 
-ln ~/dotfiles/picom/picom.conf ~/.config/picom.conf
+ln -s ~/dotfiles/picom/picom.conf ~/.config/picom.conf
 
 # i3 config
 
 mkdir ~/.config/i3
-ln ~/dotfiles/i3/config ~/.config/i3/config
-mkdir ~/.config/i3blocks
-ln ~/dotfiles/i3/i3blocks.conf ~/.config/i3blocks/config
+ln -s ~/dotfiles/i3/config ~/.config/i3/config
+#mkdir ~/.config/i3blocks
+#ln ~/dotfiles/i3/i3blocks.conf ~/.config/i3blocks/config
 
 sudo mv /usr/bin/ksplashqml /usr/bin/ksplashqml.old
 sudo cp ~/dotfiles/i3/plasma-i3.desktop /usr/share/xsessions/plasma-i3.desktop
