@@ -500,7 +500,7 @@ autocmd Filetype scss                 setlocal expandtab tabstop=2 shiftwidth=2 
 autocmd Filetype css                  setlocal foldmethod=syntax
 autocmd Filetype scss                 setlocal foldmethod=syntax
 
-call coc#add_extension('coc-css')
+"call coc#add_extension('coc-css')
 " }}}
 " JSON {{{
 autocmd Filetype json                 setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
