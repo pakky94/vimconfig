@@ -42,6 +42,8 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 
+Plug 'cespare/vim-toml'
+
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-surround'
 Plug 'justinmk/vim-sneak'
@@ -64,12 +66,13 @@ Plug 'mbbill/undotree'
 "Plug 'junegunn/vim-plug' " enable to have :h for plug
 Plug 'morhetz/gruvbox'
 "Plug 'ctrlpvim/ctrlp.vim'
-Plug 'mhinz/vim-startify'
+"Plug 'mhinz/vim-startify'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'vim-scripts/vim-auto-save'
-Plug 'luochen1990/rainbow'
+"Plug 'luochen1990/rainbow'
 Plug 'jiangmiao/auto-pairs'
 Plug 'mattn/emmet-vim'
+Plug 'dag/vim-fish'
 
 Plug 'airblade/vim-rooter'
 
@@ -161,6 +164,8 @@ set smartcase " when searching try to be smart about cases
 set incsearch " search while typing
 set hlsearch " highlight search results
 set wildmenu " visual autocomplete for command menu
+" use ignorecase and smartcase for vim-sneak
+let g:sneak#use_ic_scs = 1
 " }}}
 " Spaces & Tabs {{{
 set tabstop=4 " number of visual spaces per TAB
@@ -478,7 +483,10 @@ catch
     echo "coc.nvim is not installed"
 endtry
 " }}}
-" JavaScript {{{
+" Rust {{{
+call coc#add_extension('coc-rust-analyzer')
+" }}}
+" " JavaScript {{{
 autocmd Filetype javascript           setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd Filetype javascript.jsx       setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd Filetype javascript           setlocal foldmethod=syntax
@@ -535,43 +543,43 @@ endif
 let g:jedi#popup_on_dot = 0
 " }}}
 " Startify {{{
-let g:startify_lists = [
-    \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
-    \ { 'type': 'files',     'header': ['   MRU']            },
-    \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
-    \ { 'type': 'sessions',  'header': ['   Sessions']       },
-    \ { 'type': 'commands',  'header': ['   Commands']       },
-    \ ]
-let g:startify_bookmarks = [
-    \ { 'c': '~/dotfiles/vim/vimrc' },
-    \ { 'b': '~/Documents/tutorials/react-node/bwm-react/' },
-    \ { 'n': '~/Documents/tutorials/rncourse/' },
-    \ ]
-if has('nvim')
-    let g:startify_ascii = [
-                \ "'              .,-:;//;:=,                                                             ,:/+/-",
-                \ "'         . :H@@@MM@M#H/.,+%;,                                                         /M/              .,-=;//;-",
-                \ "'      ,/X+ +M@@M@MM%=,-%HMMM@X/,                                                 .:/= ;MH/,    ,=/+%$XH@MM#@:",
-                \ "'     -+@MM; $M@@MH+-,;XMMMM@MMMM@+-                                             -$##@+$###@H@MMM#######H:.    -/H#",
-                \ "'    ;@M@@M- XM@X;. -+XXXXXHHH@M@M#@/.                                      .,H@H@ X######@ -H#####@+-     -+H###@X",
-                \ "'  ,%MM@@MH ,@%=            .---=-=:=,.                                      .,@##H;      +XM##M/,     =%@###@X;-",
-                \ "'  -@#@@@MX .,              -%HX$$%%%+;                                    X%-  :M##########$.    .:%M###@%:",
-                \ "' =-./@M@M$                  .;@MMMM@MM:                                   M##H,   +H@@@$/-.  ,;$M###@%,          -",
-                \ "' X@/ -$MM/                    .+MM@@@M$                                   M####M=,,---,.-%%H####M$:          ,+@##",
-                \ "',@M@H: :@:                    . -X#@@@@-                                  @##################@/.         :%H##@$-",
-                \ "',@@@MMX, .                    /H- ;@M@M=                                  M###############H,         ;HM##M$=",
-                \ "'.H@@@@M@+,                    %MM+..%#$.                                  #################.    .=$M##M$=",
-                \ "' /MMMM@MMH/.                  XM@MH; -;                                   ################H..;XM##M$=          .:+",
-                \ "'  /%+%$XHH@$=              , .H@@@@MX,                                    M###################@%=           =+@MH%",
-                \ "'   .=--------.           -%H.,@@@@@MX,                                    @#################M/.         =+H#X%=",
-                \ "'   .%MM@@@HHHXX$$$%+- .:$MMX -M@@MM%.                                     =+M###############M,      ,/X#H+:,",
-                \ "'     =XMMM@MM@MM#H;,-+HMM@M+ /MMMX=                                         .;XM###########H=   ,/X#H+:;",
-                \ "'       =%@M@M#@$-.=$@MM@@@M; %M%=                                              .=+HM#######M+/+HM@+=.",
-                \ "'         ,:+$+-,/H#MMMMMMM@- -,                                                    ,:/%XM####H/.",
-                \ "'               =++%%%%+/:-.                                                             ,.:=-.",
-                \]
-endif
-let g:startify_custom_header = map(g:startify_ascii, '"     ".v:val')
+"let g:startify_lists = [
+    "\ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+    "\ { 'type': 'files',     'header': ['   MRU']            },
+    "\ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
+    "\ { 'type': 'sessions',  'header': ['   Sessions']       },
+    "\ { 'type': 'commands',  'header': ['   Commands']       },
+    "\ ]
+"let g:startify_bookmarks = [
+    "\ { 'c': '~/dotfiles/vim/vimrc' },
+    "\ { 'b': '~/Documents/tutorials/react-node/bwm-react/' },
+    "\ { 'n': '~/Documents/tutorials/rncourse/' },
+    "\ ]
+"if has('nvim')
+    "let g:startify_ascii = [
+                "\ "'              .,-:;//;:=,                                                             ,:/+/-",
+                "\ "'         . :H@@@MM@M#H/.,+%;,                                                         /M/              .,-=;//;-",
+                "\ "'      ,/X+ +M@@M@MM%=,-%HMMM@X/,                                                 .:/= ;MH/,    ,=/+%$XH@MM#@:",
+                "\ "'     -+@MM; $M@@MH+-,;XMMMM@MMMM@+-                                             -$##@+$###@H@MMM#######H:.    -/H#",
+                "\ "'    ;@M@@M- XM@X;. -+XXXXXHHH@M@M#@/.                                      .,H@H@ X######@ -H#####@+-     -+H###@X",
+                "\ "'  ,%MM@@MH ,@%=            .---=-=:=,.                                      .,@##H;      +XM##M/,     =%@###@X;-",
+                "\ "'  -@#@@@MX .,              -%HX$$%%%+;                                    X%-  :M##########$.    .:%M###@%:",
+                "\ "' =-./@M@M$                  .;@MMMM@MM:                                   M##H,   +H@@@$/-.  ,;$M###@%,          -",
+                "\ "' X@/ -$MM/                    .+MM@@@M$                                   M####M=,,---,.-%%H####M$:          ,+@##",
+                "\ "',@M@H: :@:                    . -X#@@@@-                                  @##################@/.         :%H##@$-",
+                "\ "',@@@MMX, .                    /H- ;@M@M=                                  M###############H,         ;HM##M$=",
+                "\ "'.H@@@@M@+,                    %MM+..%#$.                                  #################.    .=$M##M$=",
+                "\ "' /MMMM@MMH/.                  XM@MH; -;                                   ################H..;XM##M$=          .:+",
+                "\ "'  /%+%$XHH@$=              , .H@@@@MX,                                    M###################@%=           =+@MH%",
+                "\ "'   .=--------.           -%H.,@@@@@MX,                                    @#################M/.         =+H#X%=",
+                "\ "'   .%MM@@@HHHXX$$$%+- .:$MMX -M@@MM%.                                     =+M###############M,      ,/X#H+:,",
+                "\ "'     =XMMM@MM@MM#H;,-+HMM@M+ /MMMX=                                         .;XM###########H=   ,/X#H+:;",
+                "\ "'       =%@M@M#@$-.=$@MM@@@M; %M%=                                              .=+HM#######M+/+HM@+=.",
+                "\ "'         ,:+$+-,/H#MMMMMMM@- -,                                                    ,:/%XM####H/.",
+                "\ "'               =++%%%%+/:-.                                                             ,.:=-.",
+                "\]
+"endif
+"let g:startify_custom_header = map(g:startify_ascii, '"     ".v:val')
 " }}}
 " Denite {{{
 try
