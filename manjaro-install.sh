@@ -14,7 +14,7 @@ sudo pacman -S --noconfirm alacritty exa fish neovim ripgrep tmux yay zsh \
     meson extra-cmake-modules
 
 yay -S --noconfirm ttf-jetbrains-mono ttf-font-awesome-4 \
-    joplin syncthingtray visual-studio-code-bin \
+    joplin-appimg syncthingtray visual-studio-code-bin \
     ibus-mozc ibus-qt \
     gamemode lib32-gamemode
 

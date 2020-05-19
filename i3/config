@@ -368,7 +368,8 @@ mode "$mode_gaps_outer" {
 exec ibus-daemon --xim -drx
 exec syncthing -no-browser
 exec keepassxc
-exec joplin-desktop
+exec JoplinDesktop.AppImage
+exec sleep 10; plasmashell --replace &
 
 # Start a terminal
 #bindsym $mod+Return exec termite

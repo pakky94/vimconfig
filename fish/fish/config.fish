@@ -1,3 +1,6 @@
+set EDITOR "nvim"
+set SUDO_EDITOR "nvim"
+
 set session_name "lobby"
 set tmux_bin "/usr/bin/tmux"
 
