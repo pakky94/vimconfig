@@ -71,12 +71,23 @@ sudo cp ~/dotfiles/i3/plasma-i3.desktop /usr/share/xsessions/plasma-i3.desktop
 source ~/.nvm/nvm.sh
 nvm install --lts
 
-
 nvim +PlugInstall +UpdateRemotePlugins +qall
 
 flatpak install -y flathub \
     org.kiwix.desktop \
     org.jdownloader.JDownloader \
+
+
+# Install plasma-i3-workspaces
+git clone https://github.com/pakky94/plasma-i3-workspaces ~/plasma-i3-workspaces
+cd ~/plasma-i3-workspaces
+mkdir build
+cd build
+cmake -DCMAKE_INSTALL_PREFIX=`kf5-config --prefix` -DCMAKE_BUILD_TYPE=Release -DLIB_INSTALL_DIR=lib -DKDE_INSTALL_USE_QT_SYS_PATHS=ON ../
+make
+sudo make install
+cd ~
+#rm -r ./plasma-i3-workspaces
 
 
 # install Oh-my-fish

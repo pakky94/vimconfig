@@ -384,7 +384,7 @@ try
         \ 'coc-yank',
         \]
     let g:coc_user_config = {
-        \ "coc.preferences.formatOnSaveFiletypes": ["javascript", "json", "javascriptreact"],
+        \ "coc.preferences.formatOnSaveFiletypes": ["javascript", "json", "javascriptreact", "rust"],
         \ 'yank.highlight.duration': 250,
         \ 'yank.limit': 20,
         \ "python.jediEnabled": v:false,
