@@ -81,10 +81,17 @@ Plug 'vimwiki/vimwiki'
 if has('nvim')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'Shougo/denite.nvim'
+    "Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+    "Plug 'junegunn/fzf.vim'
     "Plug 'kizza/actionmenu.nvim'
 endif
 call plug#end()
 " }}}
+
+
+"let FZF_DEFAUTL_COMMAND='rg --files'
+
+
 " General settings {{{
 set encoding=utf-8
 set fileencoding=utf-8
@@ -494,13 +501,13 @@ autocmd Filetype javascript.jsx       setlocal foldmethod=syntax
 
 autocmd Filetype javascrit,javascript.jsx EmmetInstall
 
-call coc#add_extension('coc-tsserver', 'coc-eslint', 'coc-prettier')
+"call coc#add_extension('coc-tsserver', 'coc-eslint', 'coc-prettier')
 
-call coc#config('javascript', {'suggestionActions.enabled': v:false})
-call coc#config('eslint', {
-        \   'enable': v:true,
-        \   'filetypes': ['javascript', 'javascriptreact']
-        \ })
+"call coc#config('javascript', {'suggestionActions.enabled': v:false})
+"call coc#config('eslint', {
+        "\   'enable': v:true,
+        "\   'filetypes': ['javascript', 'javascriptreact']
+        "\ })
 " }}}
 " CSS {{{
 autocmd Filetype css                  setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
@@ -645,9 +652,12 @@ try
     endfunction
 
     "nnoremap <leader>b :<C-u>Denite buffer -split=floating -winrow=1 -start-filter<CR>
-    nnoremap <leader>f :<C-u>DeniteProjectDir file/rec -split=floating -winminheight=20 -start-filter<CR>
-    nnoremap <leader>g :<C-u>DeniteProjectDir file/rec/git -split=floating -winminheight=20 -start-filter<CR>
-    nnoremap <leader>b :<C-u>Denite buffer -split=floating -winminheight=20<CR>
+    "nnoremap <leader>f :<C-u>DeniteProjectDir file/rec -split=floating -winminheight=20 -start-filter<CR>
+    "nnoremap <leader>g :<C-u>DeniteProjectDir file/rec/git -split=floating -winminheight=20 -start-filter<CR>
+    "nnoremap <leader>b :<C-u>Denite buffer -split=floating -winminheight=20<CR>
+    nnoremap <leader>f :<C-u>DeniteProjectDir file/rec -winminheight=20 -start-filter<CR>
+    nnoremap <leader>g :<C-u>DeniteProjectDir file/rec/git -winminheight=20 -start-filter<CR>
+    nnoremap <leader>b :<C-u>Denite buffer -winminheight=20<CR>
     nnoremap <leader>8 :<C-u>DeniteCursorWord grep:. -split=floating -winminheight=20<CR>
     nnoremap <leader>/ :<C-u>Denite grep:.::! -split=floating -winminheight=20 -start-filter<CR>
     "nnoremap <leader><leader>/ :<C-u>DeniteBufferDir grep:.<CR>
