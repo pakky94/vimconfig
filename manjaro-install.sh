@@ -6,7 +6,7 @@ sudo pacman -Syu --noconfirm
 
 sudo pacman -R --noconfirm manjaro-application-utility pamac-cli pamac-common pamac-gtk pamac-snap-plugin pamac-tray-appindicator yakuake
 
-sudo pacman -S --noconfirm alacritty exa fish neovim ripgrep tmux yay zsh \
+sudo pacman -S --noconfirm alacritty bat exa fd fish neovim ripgrep tmux yay zsh \
     feh i3blocks i3-gaps i3status picom \
     flatpak keepassxc syncthing \
     rofi \
