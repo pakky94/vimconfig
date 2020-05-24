@@ -270,7 +270,7 @@ bindsym $mod+Shift+s mode "$mode_system"
 #}
 
 # Starting things with i3
-#exec_always --no-startup-id picom -bc    # Bare compositor to allow transparency
+exec_always --no-startup-id picom -bc    # Bare compositor to allow transparency
 for_window [class="yakuake"] floating enable
 for_window [class="systemsettings"] floating enable
 exec --no-startup-id feh --bg-fill ~/Pictures/wallpapers/space1.jpg
